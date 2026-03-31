@@ -1,0 +1,7 @@
+better-sqlite3 dir: true
+Contents: binding.gyp, deps, lib, LICENSE, package.json, README.md, src
+prebuilds exists: false
+
+@better-sqlite3 dir: false
+
+better-sqlite3 loaded successfully!

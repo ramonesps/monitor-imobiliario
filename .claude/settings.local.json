@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /Users/ramon/monitor-imobiliario)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git --yes)",
+      "Bash(echo \"EXIT CODE: $?\")",
+      "Bash(npm --version)",
+      "Bash(npm install:*)",
+      "Bash(npx vitest:*)",
+      "Bash(node -e \"require\\(''fs''\\).writeFileSync\\(''/c/Users/ramon/monitor-imobiliario/hello.txt'', ''hello world''\\)\")",
+      "Bash(node -e \"require\\(''fs''\\).writeFileSync\\(''C:\\\\\\\\Users\\\\\\\\ramon\\\\\\\\monitor-imobiliario\\\\\\\\hello.txt'', ''hello world''\\)\")",
+      "Bash(node -p \"process.cwd\\(\\)\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\run-tests.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\check-deps2.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\check-deps3.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\check-deps4.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\check-bsqlite.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\run-tests2.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\install-sqljs.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\ramon\\\\monitor-imobiliario\\\\run-tests3.mjs\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git add:*)",
+      "Bash(cmd /c \"git log --oneline 2>&1\")",
+      "Bash(git config:*)",
+      "Bash(git commit -m \"chore: setup inicial — arquitetura base + 112 testes:*)"
+    ]
+  }
+}

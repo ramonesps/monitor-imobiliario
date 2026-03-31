@@ -1,0 +1,126 @@
+=== vitest run SUCCESS ===
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/ramon/monitor-imobiliario[39m
+
+[90mstderr[2m | src/tests/resilience/resilience.test.ts[2m > [22m[2mR02: HTML mudou (seletores quebrados) → log, não crash[2m > [22m[2mdeve retornar array vazio quando HTML não tem seletores esperados[22m[39m
+[bad-html-platform] Seletores não encontrados — HTML pode ter mudado
+
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR01: Plataforma fora do ar → runner continua nas demais[2m > [22mdeve continuar executando outros scrapers quando um falha
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR01: Plataforma fora do ar → runner continua nas demais[2m > [22mdeve logar o erro da plataforma que falhou
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR02: HTML mudou (seletores quebrados) → log, não crash[2m > [22mdeve retornar array vazio quando HTML não tem seletores esperados
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR02: HTML mudou (seletores quebrados) → log, não crash[2m > [22mdeve logar erro de parse sem lançar exceção
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR03: Foto 404 → pula, continua[2m > [22mdeve retornar null para foto com erro 404
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR03: Foto 404 → pula, continua[2m > [22mdeve processar fotos restantes após uma falhar
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU01: generatePhash — hash de imagem conhecida[2m > [22mdeve retornar uma string hexadecimal de 16 caracteres
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU01: generatePhash — hash de imagem conhecida[2m > [22mdeve retornar hash determinístico para a mesma imagem
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU01: generatePhash — hash de imagem conhecida[2m > [22mdeve retornar hash consistente para pixels uniformes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22mdeve retornar distância 0 para hashes idênticos
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22mdeve retornar distância pequena para hashes muito similares
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22misSameProperty retorna true para distância < 10
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22mdeve lançar erro para hashes com comprimentos diferentes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU03: hammingDistance — imóveis distintos → distance > 30[2m > [22mdeve retornar distância alta para hashes completamente diferentes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU03: hammingDistance — imóveis distintos → distance > 30[2m > [22misSameProperty retorna false para imagens muito diferentes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU03: hammingDistance — imóveis distintos → distance > 30[2m > [22mdeve calcular distância corretamente com valores parciais
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR04: Rate limiting → retry com backoff[2m > [22mdeve tentar novamente após rate limiting e ter sucesso
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI01: ZapScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI01: ZapScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI01: ZapScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI02: VivaRealScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI02: VivaRealScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI02: VivaRealScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI03: OlxScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI03: OlxScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI03: OlxScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI04: ImovelWebScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI04: ImovelWebScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI04: ImovelWebScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI05: FriasNetoScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI05: FriasNetoScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI05: FriasNetoScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI06: MiguelImoveisScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI06: MiguelImoveisScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI06: MiguelImoveisScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR04: Rate limiting → retry com backoff[2m > [22mdeve lançar erro após esgotar tentativas
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR05: Cron roda 2x → idempotente (não duplica listings)[2m > [22mnão deve criar listing duplicado para mesmo external_url
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR05: Cron roda 2x → idempotente (não duplica listings)[2m > [22mdeve criar novo listing quando URL não existe ainda
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash idêntico para anúncios com mesmo andar, preço e tipo
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash diferente para tipos diferentes
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash diferente para andares diferentes
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash idêntico para preços dentro da banda de ±10%
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve retornar string de 32 caracteres hexadecimais
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mdeve retornar 100% para match perfeito
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mdeve retornar score 60-89% para match parcial
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mdeve retornar score < 60% para match fraco
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mclassifyDuplicate retorna "merge" para score >= 90
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mclassifyDuplicate retorna "review" para score 60-89
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mclassifyDuplicate retorna "new" para score < 60
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mPOST /api/buildings — deve criar um prédio
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings — deve listar todos os prédios
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar um prédio específico
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar vazio para ID inexistente
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=rent
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=sale
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=active
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=inactive
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por faixa de preço (price_min/price_max)
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por furnished
+ [32m✓[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve listar todos os listings de um building
+ [32m✓[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve ter score >= 90% para mesmo imóvel em plataformas diferentes
+ [32m✓[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve criar 1 listing com 2 sources após merge
+ [32m✓[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve ter score 60-89% para match ambíguo
+ [32m✓[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve criar duplicate_review com status pending para match ambíguo
+ [32m✓[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve atualizar status de review para confirmed_different
+ [32m✓[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar um building e um listing corretamente
+ [32m✓[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar uma source vinculada ao listing
+ [32m✓[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mdeve criar registro em price_history quando preço muda
+ [32m✓[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mnão deve criar price_history quando preço não mudou
+ [32m✓[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mdeve marcar listing como inactive após 2 dias ausente
+ [32m✓[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mnão deve desativar listing visto ontem
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mdeve desativar listing ausente há exatamente 2 dias
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mdeve desativar listing ausente há mais de 2 dias
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mnão deve desativar listing visto hoje
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mnão deve desativar listing visto ontem (1 dia)
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mnão deve desativar listing visto há 1.9 dias
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mdeve desativar listing visto há 2.5 dias
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 0 dias quando datas são iguais
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 1 dia de diferença
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 30 dias de diferença
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 90 dias (trimestre)
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve retornar 0 para datas inversas (proteção contra bug)
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular dias com datas em formato ISO com timezone
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Mobiliado" → "full"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Mobiliada" → "full"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Semi-Mobiliado" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Semimobiliado" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Semi Mobiliado" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Sem mobília" → "none"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Sem móveis" → "none"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Não mobiliado" → "none"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22mtexto desconhecido → "unknown"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22mdeve ser case-insensitive
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: BaseScraper.parseFurnished — via classe base[2m > [22m"Mobiliado" → "full"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: BaseScraper.parseFurnished — via classe base[2m > [22m"Semi" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"12º andar" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"12 andar" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"Andar 12" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"Térreo" → "0"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"terreo" → "0"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"1° andar" → "1"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22mnúmero puro "5" → "5"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22mtexto sem andar → null
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: BaseScraper.parseFloor — via classe base[2m > [22m"12º andar" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: BaseScraper.parseFloor — via classe base[2m > [22m"Térreo" → "0"
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança quando preço aumentou
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança quando preço diminuiu
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mnão deve detectar mudança para preços idênticos
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mnão deve detectar mudança para diferença mínima (< R$1)
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança para diferença de exatamente R$1
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança em preços de venda (valores altos)
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve tratar preço zerado
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m112 passed[39m[22m[90m (112)[39m
+[2m   Start at [22m 22:55:10
+[2m   Duration [22m 8.76s[2m (transform 1.69s, setup 931ms, collect 4.88s, tests 1.12s, environment 26.89s, prepare 11.33s)[22m
+

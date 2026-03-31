@@ -1,0 +1,837 @@
+=== npm install --ignore-scripts ===
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+npm warn deprecated glob@8.1.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+npm warn deprecated glob@10.3.10: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+npm warn deprecated next@14.2.3: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/security-update-2025-12-11 for more details.
+
+added 652 packages, changed 1 package, and audited 654 packages in 2m
+
+211 packages are looking for funding
+  run `npm fund` for details
+
+15 vulnerabilities (8 moderate, 6 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+
+=== vitest run (with failures/exit code 1) ===
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/ramon/monitor-imobiliario[39m
+
+[90mstderr[2m | src/tests/resilience/resilience.test.ts[2m > [22m[2mR02: HTML mudou (seletores quebrados) → log, não crash[2m > [22m[2mdeve retornar array vazio quando HTML não tem seletores esperados[22m[39m
+[bad-html-platform] Seletores não encontrados — HTML pode ter mudado
+
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR01: Plataforma fora do ar → runner continua nas demais[2m > [22mdeve continuar executando outros scrapers quando um falha
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR01: Plataforma fora do ar → runner continua nas demais[2m > [22mdeve logar o erro da plataforma que falhou
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR02: HTML mudou (seletores quebrados) → log, não crash[2m > [22mdeve retornar array vazio quando HTML não tem seletores esperados
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR02: HTML mudou (seletores quebrados) → log, não crash[2m > [22mdeve logar erro de parse sem lançar exceção
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR03: Foto 404 → pula, continua[2m > [22mdeve retornar null para foto com erro 404
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR03: Foto 404 → pula, continua[2m > [22mdeve processar fotos restantes após uma falhar
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU01: generatePhash — hash de imagem conhecida[2m > [22mdeve retornar uma string hexadecimal de 16 caracteres
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU01: generatePhash — hash de imagem conhecida[2m > [22mdeve retornar hash determinístico para a mesma imagem
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU01: generatePhash — hash de imagem conhecida[2m > [22mdeve retornar hash consistente para pixels uniformes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22mdeve retornar distância 0 para hashes idênticos
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22mdeve retornar distância pequena para hashes muito similares
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22misSameProperty retorna true para distância < 10
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU02: hammingDistance — mesmo imóvel → distance < 10[2m > [22mdeve lançar erro para hashes com comprimentos diferentes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU03: hammingDistance — imóveis distintos → distance > 30[2m > [22mdeve retornar distância alta para hashes completamente diferentes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU03: hammingDistance — imóveis distintos → distance > 30[2m > [22misSameProperty retorna false para imagens muito diferentes
+ [32m✓[39m src/tests/unit/phash.test.ts[2m > [22mU03: hammingDistance — imóveis distintos → distance > 30[2m > [22mdeve calcular distância corretamente com valores parciais
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR04: Rate limiting → retry com backoff[2m > [22mdeve tentar novamente após rate limiting e ter sucesso
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR04: Rate limiting → retry com backoff[2m > [22mdeve lançar erro após esgotar tentativas
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR05: Cron roda 2x → idempotente (não duplica listings)[2m > [22mnão deve criar listing duplicado para mesmo external_url
+ [32m✓[39m src/tests/resilience/resilience.test.ts[2m > [22mR05: Cron roda 2x → idempotente (não duplica listings)[2m > [22mdeve criar novo listing quando URL não existe ainda
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI01: ZapScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI01: ZapScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI01: ZapScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI02: VivaRealScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI02: VivaRealScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI02: VivaRealScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI03: OlxScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI03: OlxScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI03: OlxScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI04: ImovelWebScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI04: ImovelWebScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI04: ImovelWebScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI05: FriasNetoScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI05: FriasNetoScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI05: FriasNetoScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI06: MiguelImoveisScraper — parsing de HTML mockado[2m > [22mdeve ter o nome correto
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI06: MiguelImoveisScraper — parsing de HTML mockado[2m > [22mparseListingCard deve lançar "not implemented" (stub)
+ [32m✓[39m src/tests/integration/scrapers.test.ts[2m > [22mI06: MiguelImoveisScraper — parsing de HTML mockado[2m > [22msearch deve retornar array vazio (stub)
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash idêntico para anúncios com mesmo andar, preço e tipo
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash diferente para tipos diferentes
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash diferente para andares diferentes
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve gerar hash idêntico para preços dentro da banda de ±10%
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU04: generateFingerprint — mesmo andar+preço+tipo → mesmo hash[2m > [22mdeve retornar string de 32 caracteres hexadecimais
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mdeve retornar 100% para match perfeito
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mdeve retornar score 60-89% para match parcial
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mdeve retornar score < 60% para match fraco
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mclassifyDuplicate retorna "merge" para score >= 90
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mclassifyDuplicate retorna "review" para score 60-89
+ [32m✓[39m src/tests/unit/dedup.test.ts[2m > [22mU09: calculateSimilarity — scores corretos por tipo de match[2m > [22mclassifyDuplicate retorna "new" para score < 60
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mPOST /api/buildings — deve criar um prédio
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings — deve listar todos os prédios
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar um prédio específico
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar vazio para ID inexistente
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=rent
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=sale
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=active
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=inactive
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por faixa de preço (price_min/price_max)
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por furnished
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve listar todos os listings de um building
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar um building e um listing corretamente
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar uma source vinculada ao listing
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mdeve criar registro em price_history quando preço muda
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mnão deve criar price_history quando preço não mudou
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mdeve marcar listing como inactive após 2 dias ausente
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mnão deve desativar listing visto ontem
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve ter score >= 90% para mesmo imóvel em plataformas diferentes
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve criar 1 listing com 2 sources após merge
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve ter score 60-89% para match ambíguo
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve criar duplicate_review com status pending para match ambíguo
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [31m×[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve atualizar status de review para confirmed_same ou confirmed_different
+[31m   → Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[31m   → Cannot read properties of undefined (reading 'sqlite')[39m
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 0 dias quando datas são iguais
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 1 dia de diferença
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 30 dias de diferença
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular 90 dias (trimestre)
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve retornar 0 para datas inversas (proteção contra bug)
+ [32m✓[39m src/tests/unit/days-on-market.test.ts[2m > [22mU06: calculateDaysOnMarket — deactivated_at - first_seen_at[2m > [22mdeve calcular dias com datas em formato ISO com timezone
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Mobiliado" → "full"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Mobiliada" → "full"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Semi-Mobiliado" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Semimobiliado" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Semi Mobiliado" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Sem mobília" → "none"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Sem móveis" → "none"
+ [31m×[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Não mobiliado" → "none"
+[31m   → expected 'full' to be 'none' // Object.is equality[39m
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22mtexto desconhecido → "unknown"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22mdeve ser case-insensitive
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: BaseScraper.parseFurnished — via classe base[2m > [22m"Mobiliado" → "full"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU07: BaseScraper.parseFurnished — via classe base[2m > [22m"Semi" → "partial"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"12º andar" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"12 andar" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"Andar 12" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"Térreo" → "0"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"terreo" → "0"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22m"1° andar" → "1"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22mnúmero puro "5" → "5"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: parseFloor — extração de número do andar[2m > [22mtexto sem andar → null
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: BaseScraper.parseFloor — via classe base[2m > [22m"12º andar" → "12"
+ [32m✓[39m src/tests/unit/parsers.test.ts[2m > [22mU08: BaseScraper.parseFloor — via classe base[2m > [22m"Térreo" → "0"
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mdeve desativar listing ausente há exatamente 2 dias
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mdeve desativar listing ausente há mais de 2 dias
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mnão deve desativar listing visto hoje
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mnão deve desativar listing visto ontem (1 dia)
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mnão deve desativar listing visto há 1.9 dias
+ [32m✓[39m src/tests/unit/status.test.ts[2m > [22mU10: shouldDeactivate — transição active → inactive após 2 dias ausente[2m > [22mdeve desativar listing visto há 2.5 dias
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança quando preço aumentou
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança quando preço diminuiu
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mnão deve detectar mudança para preços idênticos
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mnão deve detectar mudança para diferença mínima (< R$1)
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança para diferença de exatamente R$1
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve detectar mudança em preços de venda (valores altos)
+ [32m✓[39m src/tests/unit/price.test.ts[2m > [22mU05: hasPriceChanged — detecção de mudança de preço[2m > [22mdeve tratar preço zerado
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 23 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mPOST /api/buildings — deve criar um prédio
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings — deve listar todos os prédios
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar um prédio específico
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar vazio para ID inexistente
+[31m[1mError[22m: Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[90m [2m❯[22m bindings node_modules/bindings/bindings.js:[2m126:9[22m[39m
+[90m [2m❯[22m new Database node_modules/better-sqlite3/lib/database.js:[2m48:64[22m[39m
+[36m [2m❯[22m createTestDb src/tests/integration/api.test.ts:[2m13:18[22m[39m
+    [90m 11| [39m
+    [90m 12| [39m[35mfunction[39m [34mcreateTestDb[39m() {
+    [90m 13| [39m  [35mconst[39m sqlite [33m=[39m [35mnew[39m [33mDatabase[39m([32m':memory:'[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m 14| [39m  sqlite[33m.[39m[34mpragma[39m([32m'foreign_keys = ON'[39m)
+    [90m 15| [39m  [35mconst[39m db [33m=[39m [34mdrizzle[39m(sqlite[33m,[39m { schema })
+[90m [2m❯[22m src/tests/integration/api.test.ts:[2m57:14[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ tries: [ 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node' ] }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mPOST /api/buildings — deve criar um prédio
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings — deve listar todos os prédios
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar um prédio específico
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API CRUD buildings[2m > [22mGET /api/buildings/:id — deve retornar vazio para ID inexistente
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'sqlite')[39m
+[36m [2m❯[22m src/tests/integration/api.test.ts:[2m61:12[22m[39m
+    [90m 59| [39m
+    [90m 60| [39m  [34mafterEach[39m(() [33m=>[39m {
+    [90m 61| [39m    testDb[33m.[39msqlite[33m.[39m[34mclose[39m()
+    [90m   | [39m           [31m^[39m
+    [90m 62| [39m  })
+    [90m 63| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=rent
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=sale
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=active
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=inactive
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por faixa de preço (price_min/price_max)
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por furnished
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve listar todos os listings de um building
+[31m[1mError[22m: Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[90m [2m❯[22m bindings node_modules/bindings/bindings.js:[2m126:9[22m[39m
+[90m [2m❯[22m new Database node_modules/better-sqlite3/lib/database.js:[2m48:64[22m[39m
+[36m [2m❯[22m createTestDb src/tests/integration/api.test.ts:[2m13:18[22m[39m
+    [90m 11| [39m
+    [90m 12| [39m[35mfunction[39m [34mcreateTestDb[39m() {
+    [90m 13| [39m  [35mconst[39m sqlite [33m=[39m [35mnew[39m [33mDatabase[39m([32m':memory:'[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m 14| [39m  sqlite[33m.[39m[34mpragma[39m([32m'foreign_keys = ON'[39m)
+    [90m 15| [39m  [35mconst[39m db [33m=[39m [34mdrizzle[39m(sqlite[33m,[39m { schema })
+[90m [2m❯[22m src/tests/integration/api.test.ts:[2m120:14[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ tries: [ 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node' ] }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=rent
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por type=sale
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=active
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por status=inactive
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por faixa de preço (price_min/price_max)
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve filtrar listings por furnished
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/api.test.ts[2m > [22mI13: API filtros de listings[2m > [22mdeve listar todos os listings de um building
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'sqlite')[39m
+[36m [2m❯[22m src/tests/integration/api.test.ts:[2m157:12[22m[39m
+    [90m155| [39m
+    [90m156| [39m  [34mafterEach[39m(() [33m=>[39m {
+    [90m157| [39m    testDb[33m.[39msqlite[33m.[39m[34mclose[39m()
+    [90m   | [39m           [31m^[39m
+    [90m158| [39m  })
+    [90m159| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve ter score >= 90% para mesmo imóvel em plataformas diferentes
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve criar 1 listing com 2 sources após merge
+[31m[1mError[22m: Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[90m [2m❯[22m bindings node_modules/bindings/bindings.js:[2m126:9[22m[39m
+[90m [2m❯[22m new Database node_modules/better-sqlite3/lib/database.js:[2m48:64[22m[39m
+[36m [2m❯[22m createTestDb src/tests/integration/dedup-flow.test.ts:[2m14:18[22m[39m
+    [90m 12| [39m
+    [90m 13| [39m[35mfunction[39m [34mcreateTestDb[39m() {
+    [90m 14| [39m  [35mconst[39m sqlite [33m=[39m [35mnew[39m [33mDatabase[39m([32m':memory:'[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m 15| [39m  sqlite[33m.[39m[34mpragma[39m([32m'foreign_keys = ON'[39m)
+    [90m 16| [39m  [35mconst[39m db [33m=[39m [34mdrizzle[39m(sqlite[33m,[39m { schema })
+[90m [2m❯[22m src/tests/integration/dedup-flow.test.ts:[2m58:14[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ tries: [ 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node' ] }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve ter score >= 90% para mesmo imóvel em plataformas diferentes
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI11: Dedup merge — mesmo imóvel de 2 plataformas → 1 listing, 2 sources[2m > [22mdeve criar 1 listing com 2 sources após merge
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'sqlite')[39m
+[36m [2m❯[22m src/tests/integration/dedup-flow.test.ts:[2m62:12[22m[39m
+    [90m 60| [39m
+    [90m 61| [39m  [34mafterEach[39m(() [33m=>[39m {
+    [90m 62| [39m    testDb[33m.[39msqlite[33m.[39m[34mclose[39m()
+    [90m   | [39m           [31m^[39m
+    [90m 63| [39m  })
+    [90m 64| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve ter score 60-89% para match ambíguo
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve criar duplicate_review com status pending para match ambíguo
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve atualizar status de review para confirmed_same ou confirmed_different
+[31m[1mError[22m: Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[90m [2m❯[22m bindings node_modules/bindings/bindings.js:[2m126:9[22m[39m
+[90m [2m❯[22m new Database node_modules/better-sqlite3/lib/database.js:[2m48:64[22m[39m
+[36m [2m❯[22m createTestDb src/tests/integration/dedup-flow.test.ts:[2m14:18[22m[39m
+    [90m 12| [39m
+    [90m 13| [39m[35mfunction[39m [34mcreateTestDb[39m() {
+    [90m 14| [39m  [35mconst[39m sqlite [33m=[39m [35mnew[39m [33mDatabase[39m([32m':memory:'[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m 15| [39m  sqlite[33m.[39m[34mpragma[39m([32m'foreign_keys = ON'[39m)
+    [90m 16| [39m  [35mconst[39m db [33m=[39m [34mdrizzle[39m(sqlite[33m,[39m { schema })
+[90m [2m❯[22m src/tests/integration/dedup-flow.test.ts:[2m139:14[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ tries: [ 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node' ] }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve ter score 60-89% para match ambíguo
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve criar duplicate_review com status pending para match ambíguo
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/dedup-flow.test.ts[2m > [22mI12: Dedup review — score ambíguo → cria duplicate_review pending[2m > [22mdeve atualizar status de review para confirmed_same ou confirmed_different
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'sqlite')[39m
+[36m [2m❯[22m src/tests/integration/dedup-flow.test.ts:[2m143:12[22m[39m
+    [90m141| [39m
+    [90m142| [39m  [34mafterEach[39m(() [33m=>[39m {
+    [90m143| [39m    testDb[33m.[39msqlite[33m.[39m[34mclose[39m()
+    [90m   | [39m           [31m^[39m
+    [90m144| [39m  })
+    [90m145| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar um building e um listing corretamente
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar uma source vinculada ao listing
+[31m[1mError[22m: Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[90m [2m❯[22m bindings node_modules/bindings/bindings.js:[2m126:9[22m[39m
+[90m [2m❯[22m new Database node_modules/better-sqlite3/lib/database.js:[2m48:64[22m[39m
+[36m [2m❯[22m createTestDb src/tests/integration/listing-flow.test.ts:[2m15:18[22m[39m
+    [90m 13| [39m[90m// Helper para criar banco in-memory com schema[39m
+    [90m 14| [39m[35mfunction[39m [34mcreateTestDb[39m() {
+    [90m 15| [39m  [35mconst[39m sqlite [33m=[39m [35mnew[39m [33mDatabase[39m([32m':memory:'[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m 16| [39m  sqlite[33m.[39m[34mpragma[39m([32m'foreign_keys = ON'[39m)
+    [90m 17| [39m
+[90m [2m❯[22m src/tests/integration/listing-flow.test.ts:[2m97:14[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ tries: [ 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node' ] }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar um building e um listing corretamente
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI08: Fluxo completo de novo listing[2m > [22mdeve criar uma source vinculada ao listing
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'sqlite')[39m
+[36m [2m❯[22m src/tests/integration/listing-flow.test.ts:[2m101:12[22m[39m
+    [90m 99| [39m
+    [90m100| [39m  [34mafterEach[39m(() [33m=>[39m {
+    [90m101| [39m    testDb[33m.[39msqlite[33m.[39m[34mclose[39m()
+    [90m   | [39m           [31m^[39m
+    [90m102| [39m  })
+    [90m103| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mdeve criar registro em price_history quando preço muda
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mnão deve criar price_history quando preço não mudou
+[31m[1mError[22m: Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[90m [2m❯[22m bindings node_modules/bindings/bindings.js:[2m126:9[22m[39m
+[90m [2m❯[22m new Database node_modules/better-sqlite3/lib/database.js:[2m48:64[22m[39m
+[36m [2m❯[22m createTestDb src/tests/integration/listing-flow.test.ts:[2m15:18[22m[39m
+    [90m 13| [39m[90m// Helper para criar banco in-memory com schema[39m
+    [90m 14| [39m[35mfunction[39m [34mcreateTestDb[39m() {
+    [90m 15| [39m  [35mconst[39m sqlite [33m=[39m [35mnew[39m [33mDatabase[39m([32m':memory:'[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m 16| [39m  sqlite[33m.[39m[34mpragma[39m([32m'foreign_keys = ON'[39m)
+    [90m 17| [39m
+[90m [2m❯[22m src/tests/integration/listing-flow.test.ts:[2m188:14[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ tries: [ 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node' ] }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mdeve criar registro em price_history quando preço muda
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI09: Update de listing com preço novo → price_history[2m > [22mnão deve criar price_history quando preço não mudou
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'sqlite')[39m
+[36m [2m❯[22m src/tests/integration/listing-flow.test.ts:[2m192:12[22m[39m
+    [90m190| [39m
+    [90m191| [39m  [34mafterEach[39m(() [33m=>[39m {
+    [90m192| [39m    testDb[33m.[39msqlite[33m.[39m[34mclose[39m()
+    [90m   | [39m           [31m^[39m
+    [90m193| [39m  })
+    [90m194| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mdeve marcar listing como inactive após 2 dias ausente
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mnão deve desativar listing visto ontem
+[31m[1mError[22m: Could not locate the bindings file. Tried:
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node
+ → C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node[39m
+[90m [2m❯[22m bindings node_modules/bindings/bindings.js:[2m126:9[22m[39m
+[90m [2m❯[22m new Database node_modules/better-sqlite3/lib/database.js:[2m48:64[22m[39m
+[36m [2m❯[22m createTestDb src/tests/integration/listing-flow.test.ts:[2m15:18[22m[39m
+    [90m 13| [39m[90m// Helper para criar banco in-memory com schema[39m
+    [90m 14| [39m[35mfunction[39m [34mcreateTestDb[39m() {
+    [90m 15| [39m  [35mconst[39m sqlite [33m=[39m [35mnew[39m [33mDatabase[39m([32m':memory:'[39m)
+    [90m   | [39m                 [31m^[39m
+    [90m 16| [39m  sqlite[33m.[39m[34mpragma[39m([32m'foreign_keys = ON'[39m)
+    [90m 17| [39m
+[90m [2m❯[22m src/tests/integration/listing-flow.test.ts:[2m253:14[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ tries: [ 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Debug\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\out\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\Release\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\build\default\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\compiled\25.8.2\win32\x64\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\release\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\debug\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\addon-build\default\install-root\better_sqlite3.node', 'C:\Users\ramon\monitor-imobiliario\node_modules\better-sqlite3\lib\binding\node-v141-win32-x64\better_sqlite3.node' ] }[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mdeve marcar listing como inactive após 2 dias ausente
+[31m[1m[7m FAIL [27m[22m[39m src/tests/integration/listing-flow.test.ts[2m > [22mI10: Deactivation flow — listing ausente 2+ dias → inactive[2m > [22mnão deve desativar listing visto ontem
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'sqlite')[39m
+[36m [2m❯[22m src/tests/integration/listing-flow.test.ts:[2m257:12[22m[39m
+    [90m255| [39m
+    [90m256| [39m  [34mafterEach[39m(() [33m=>[39m {
+    [90m257| [39m    testDb[33m.[39msqlite[33m.[39m[34mclose[39m()
+    [90m   | [39m           [31m^[39m
+    [90m258| [39m  })
+    [90m259| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/45]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/parsers.test.ts[2m > [22mU07: parseFurnished — parsing de status de mobília[2m > [22m"Não mobiliado" → "none"
+[31m[1mAssertionError[22m: expected 'full' to be 'none' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- none[39m
+[31m+ full[39m
+
+[36m [2m❯[22m src/tests/unit/parsers.test.ts:[2m50:45[22m[39m
+    [90m 48| [39m
+    [90m 49| [39m  [34mit[39m([32m'"Não mobiliado" → "none"'[39m[33m,[39m () [33m=>[39m {
+    [90m 50| [39m    [34mexpect[39m([34mparseFurnished[39m([32m'Não mobiliado'[39m))[33m.[39m[34mtoBe[39m([32m'none'[39m)
+    [90m   | [39m                                            [31m^[39m
+    [90m 51| [39m  })
+    [90m 52| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/45]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[31m23 failed[39m[22m[2m | [22m[1m[32m89 passed[39m[22m[90m (112)[39m
+[2m   Start at [22m 22:47:49
+[2m   Duration [22m 28.64s[2m (transform 4.12s, setup 1.23s, collect 21.79s, tests 961ms, environment 95.56s, prepare 60.63s)[22m
+
+
+
+Command failed: node_modules\.bin\vitest.cmd run --reporter=verbose 2>&1
