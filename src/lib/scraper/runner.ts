@@ -1,13 +1,30 @@
 // Orquestrador do scraper
 // Itera buildings e plataformas, tolerante a falhas (R01)
-// Fase 1: ZAP implementado. Fases 2+: demais plataformas
 
 import { eq, and } from 'drizzle-orm'
 import db from '@/lib/db'
-import { buildings, listings, listingSources } from '@/lib/db/schema'
+import {
+  buildings,
+  listings,
+  listingSources,
+  priceHistory,
+  duplicateReviews,
+} from '@/lib/db/schema'
 import { generateId } from '@/lib/utils/id'
-import { generateFingerprint, hasPriceChanged } from './dedup'
-import type { PlatformScraper, RawListing, ScraperRunOptions, ScraperRunResult } from '@/types'
+import {
+  generateFingerprint,
+  calculateSimilarity,
+  hasPriceChanged,
+  shouldDeactivate,
+  calculateDaysOnMarket,
+} from './dedup'
+import type {
+  PlatformScraper,
+  RawListing,
+  ListingFingerprint,
+  ScraperRunOptions,
+  ScraperRunResult,
+} from '@/types'
 import { ZapScraper } from './platforms/zap'
 import { VivaRealScraper } from './platforms/vivareal'
 import { OlxScraper } from './platforms/olx'
@@ -24,15 +41,9 @@ export const ALL_SCRAPERS: PlatformScraper[] = [
   new MiguelImoveisScraper(),
 ]
 
-/**
- * Executa o scraper para todos os buildings e plataformas.
- * R01: Se uma plataforma lança erro, loga e continua nas demais.
- * R05: Idempotente — verifica external_url antes de criar novo listing.
- */
 export async function runScraper(options: ScraperRunOptions = {}): Promise<ScraperRunResult[]> {
   const results: ScraperRunResult[] = []
 
-  // Busca buildings do banco
   const allBuildings = await db.select().from(buildings)
 
   const scrapers = options.platformFilter
@@ -77,20 +88,15 @@ export async function runScraper(options: ScraperRunOptions = {}): Promise<Scrap
         result.success = true
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error)
-        console.error(
-          `[runner] ERRO em ${scraper.name} para "${building.name}": ${errorMessage}`
-        )
+        console.error(`[runner] ERRO em ${scraper.name} para "${building.name}": ${errorMessage}`)
         result.error = errorMessage
       }
 
       results.push(result)
     }
 
-    // Detecta listings inativos (ausentes hoje em todas as sources)
     const deactivated = await deactivateStaleListings(building.id, today)
     if (deactivated > 0) {
-      console.log(`[runner] ${deactivated} listing(s) marcados como inativos em "${building.name}"`)
-      // Adiciona ao resultado do último scraper do building
       const last = results.filter((r) => r.buildingId === building.id).at(-1)
       if (last) last.deactivatedListings += deactivated
     }
@@ -100,15 +106,19 @@ export async function runScraper(options: ScraperRunOptions = {}): Promise<Scrap
 }
 
 /**
- * Processa um RawListing: cria ou atualiza listing + source.
- * R05: Se external_url já existe em listing_sources, apenas atualiza last_seen_at.
+ * Processa um RawListing aplicando dedup completo:
+ * - Se source já existe: atualiza timestamps e preço
+ * - Se source nova: compara com listings existentes (fingerprint + similaridade)
+ *   - Score >= 90%: merge (nova source no listing existente)
+ *   - Score 60-89%: cria listing novo + duplicate_review pending
+ *   - Score < 60%: cria listing novo
  */
 async function processRawListing(
   raw: RawListing,
   buildingId: string,
   now: string
 ): Promise<{ new: number; updated: number }> {
-  // Verifica se a source já existe
+  // R05: verifica se a source já existe pelo externalId + platform
   const [existingSource] = await db
     .select()
     .from(listingSources)
@@ -120,35 +130,30 @@ async function processRawListing(
     )
 
   if (existingSource) {
-    // Source já existe — atualiza last_seen_at e verifica preço
     await db
       .update(listingSources)
       .set({ lastSeenAt: now })
       .where(eq(listingSources.id, existingSource.id))
 
-    // Atualiza last_seen_at do listing pai
     await db
       .update(listings)
       .set({ lastSeenAt: now })
       .where(eq(listings.id, existingSource.listingId))
 
-    // Verifica se o preço mudou
-    const [parentListing] = await db
+    const [parent] = await db
       .select()
       .from(listings)
       .where(eq(listings.id, existingSource.listingId))
 
-    if (parentListing && hasPriceChanged(parentListing.priceCurrent, raw.price)) {
+    if (parent && hasPriceChanged(parent.priceCurrent, raw.price)) {
       await db
         .update(listings)
         .set({ priceCurrent: raw.price })
-        .where(eq(listings.id, parentListing.id))
+        .where(eq(listings.id, parent.id))
 
-      // Registra em price_history (importado inline para evitar importação circular)
-      const { priceHistory } = await import('@/lib/db/schema')
       await db.insert(priceHistory).values({
         id: generateId(),
-        listingId: parentListing.id,
+        listingId: parent.id,
         price: raw.price,
         sourceId: existingSource.id,
         recordedAt: now,
@@ -158,7 +163,75 @@ async function processRawListing(
     return { new: 0, updated: 1 }
   }
 
-  // Listing novo — cria listing + source
+  // Source nova — compara com listings existentes do building
+  const existingListings = await db
+    .select()
+    .from(listings)
+    .where(and(eq(listings.buildingId, buildingId), eq(listings.status, 'active')))
+
+  const rawFingerprint: ListingFingerprint = {
+    floor: raw.floor ?? null,
+    price: raw.price,
+    type: raw.type,
+    area: raw.area ?? null,
+    bedrooms: raw.bedrooms ?? null,
+    phashes: [], // fotos serão implementadas na fase seguinte
+  }
+
+  let bestMatch: (typeof existingListings)[number] | null = null
+  let bestScore = 0
+
+  for (const existing of existingListings) {
+    // Filtra candidatos pelo fingerprint (filtro rápido) ou tipo+andar
+    if (existing.type !== raw.type) continue
+
+    const existingFingerprint: ListingFingerprint = {
+      floor: existing.floor,
+      price: existing.priceCurrent,
+      type: existing.type as 'sale' | 'rent',
+      area: existing.area,
+      bedrooms: existing.bedrooms,
+      phashes: [],
+    }
+
+    const rawScore = calculateSimilarity(rawFingerprint, existingFingerprint)
+
+    // Normaliza para 100% quando não há fotos (máximo sem phash = 80pts)
+    const score = existingFingerprint.phashes.length === 0
+      ? Math.min(100, Math.round((rawScore / 80) * 100))
+      : rawScore
+
+    if (score > bestScore) {
+      bestScore = score
+      bestMatch = existing
+    }
+  }
+
+  if (bestMatch && bestScore >= 90) {
+    // Merge: adiciona como nova source do listing existente
+    await db.insert(listingSources).values({
+      id: generateId(),
+      listingId: bestMatch.id,
+      platform: raw.platform,
+      agencyName: raw.agencyName ?? null,
+      externalUrl: raw.externalUrl,
+      externalId: raw.externalId,
+      firstSeenAt: now,
+      lastSeenAt: now,
+    })
+
+    await db
+      .update(listings)
+      .set({ lastSeenAt: now })
+      .where(eq(listings.id, bestMatch.id))
+
+    console.log(
+      `[runner] Merge: ${raw.platform}/${raw.externalId} vinculado ao listing ${bestMatch.id} (score ${bestScore}%)`
+    )
+    return { new: 0, updated: 1 }
+  }
+
+  // Cria novo listing
   const listingId = generateId()
   const fingerprint = generateFingerprint(raw)
 
@@ -191,16 +264,40 @@ async function processRawListing(
     lastSeenAt: now,
   })
 
+  // Score 60-89%: cria duplicate_review para revisão manual
+  if (bestMatch && bestScore >= 60) {
+    // Evita criar review duplicada para o mesmo par
+    const existingReview = await db
+      .select()
+      .from(duplicateReviews)
+      .where(
+        and(
+          eq(duplicateReviews.listingAId, bestMatch.id),
+          eq(duplicateReviews.listingBId, listingId),
+          eq(duplicateReviews.status, 'pending')
+        )
+      )
+
+    if (existingReview.length === 0) {
+      await db.insert(duplicateReviews).values({
+        id: generateId(),
+        listingAId: bestMatch.id,
+        listingBId: listingId,
+        similarityScore: bestScore,
+        status: 'pending',
+        createdAt: now,
+      })
+
+      console.log(
+        `[runner] Revisão: listing ${listingId} vs ${bestMatch.id} (score ${bestScore}%)`
+      )
+    }
+  }
+
   return { new: 1, updated: 0 }
 }
 
-/**
- * Marca como inativo listings que não foram vistos nas últimas 2+ dias.
- * U10: ausente 2+ dias → inactive, seta deactivated_at e days_on_market.
- */
 async function deactivateStaleListings(buildingId: string, today: string): Promise<number> {
-  const { calculateDaysOnMarket, shouldDeactivate } = await import('./dedup')
-
   const active = await db
     .select()
     .from(listings)
@@ -212,11 +309,7 @@ async function deactivateStaleListings(buildingId: string, today: string): Promi
       const days = calculateDaysOnMarket(listing.firstSeenAt, today)
       await db
         .update(listings)
-        .set({
-          status: 'inactive',
-          deactivatedAt: today,
-          daysOnMarket: days,
-        })
+        .set({ status: 'inactive', deactivatedAt: today, daysOnMarket: days })
         .where(eq(listings.id, listing.id))
       count++
     }
