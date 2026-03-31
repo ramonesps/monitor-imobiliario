@@ -1,0 +1,40 @@
+# Dependências (recriadas no build)
+node_modules
+.pnp
+.pnp.js
+
+# Build do Next.js
+.next
+out
+
+# Dados locais (montados como volume em produção)
+data/
+data/monitor.db
+data/photos/
+
+# Desenvolvimento
+.env*.local
+*.log
+npm-debug.log*
+
+# Git
+.git
+.gitignore
+
+# Testes
+src/tests/
+playwright-report/
+test-results/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/
