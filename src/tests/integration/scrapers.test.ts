@@ -389,13 +389,33 @@ describe('I05: FriasNetoScraper — parsing de HTML mockado', () => {
     expect(scraper.name).toBe('frias-neto')
   })
 
-  it('parseListingCard deve lançar "not implemented" (stub)', () => {
-    expect(() => scraper.parseListingCard(FRIAS_NETO_CARD_HTML)).toThrow('not implemented')
+  it('parseListingCard deve extrair preço, área, andar, quartos e tipo', () => {
+    const result = scraper.parseListingCard(FRIAS_NETO_CARD_HTML)
+    expect(result).not.toBeNull()
+    expect(result!.price).toBe(4200)
+    expect(result!.type).toBe('rent')
+    expect(result!.area).toBe(95)
+    expect(result!.floor).toBe('7')
+    expect(result!.bedrooms).toBe(3)
+    expect(result!.platform).toBe('frias-neto')
   })
 
-  it('search deve retornar array vazio (stub)', async () => {
-    const results = await scraper.search('Edifício Test', 'Rua Test, 100')
-    expect(results).toHaveLength(0)
+  it('parseListingCard deve extrair externalId e externalUrl', () => {
+    const result = scraper.parseListingCard(FRIAS_NETO_CARD_HTML)
+    expect(result).not.toBeNull()
+    expect(result!.externalId).toBe('fn-888')
+    expect(result!.externalUrl).toContain('friasneto.com.br/imovel/888')
+  })
+
+  it('parseListingCard deve extrair foto', () => {
+    const result = scraper.parseListingCard(FRIAS_NETO_CARD_HTML)
+    expect(result!.photoUrls).toHaveLength(1)
+    expect(result!.photoUrls![0]).toContain('888.jpg')
+  })
+
+  it('parseListingCard deve retornar null para HTML sem preço', () => {
+    const result = scraper.parseListingCard('<div class="property-item"></div>')
+    expect(result).toBeNull()
   })
 })
 
@@ -407,12 +427,32 @@ describe('I06: MiguelImoveisScraper — parsing de HTML mockado', () => {
     expect(scraper.name).toBe('miguel-imoveis')
   })
 
-  it('parseListingCard deve lançar "not implemented" (stub)', () => {
-    expect(() => scraper.parseListingCard(MIGUEL_IMOVEIS_CARD_HTML)).toThrow('not implemented')
+  it('parseListingCard deve extrair preço, área, andar, quartos e tipo', () => {
+    const result = scraper.parseListingCard(MIGUEL_IMOVEIS_CARD_HTML)
+    expect(result).not.toBeNull()
+    expect(result!.price).toBe(550000)
+    expect(result!.type).toBe('sale')
+    expect(result!.area).toBe(110)
+    expect(result!.floor).toBe('2')
+    expect(result!.bedrooms).toBe(3)
+    expect(result!.platform).toBe('miguel-imoveis')
   })
 
-  it('search deve retornar array vazio (stub)', async () => {
-    const results = await scraper.search('Edifício Test', 'Rua Test, 100')
-    expect(results).toHaveLength(0)
+  it('parseListingCard deve extrair externalId e externalUrl', () => {
+    const result = scraper.parseListingCard(MIGUEL_IMOVEIS_CARD_HTML)
+    expect(result).not.toBeNull()
+    expect(result!.externalId).toBe('mi-999')
+    expect(result!.externalUrl).toContain('miguelimoveis.com.br/imovel/999')
+  })
+
+  it('parseListingCard deve extrair foto', () => {
+    const result = scraper.parseListingCard(MIGUEL_IMOVEIS_CARD_HTML)
+    expect(result!.photoUrls).toHaveLength(1)
+    expect(result!.photoUrls![0]).toContain('999.jpg')
+  })
+
+  it('parseListingCard deve retornar null para HTML sem preço', () => {
+    const result = scraper.parseListingCard('<div class="imovel-card"></div>')
+    expect(result).toBeNull()
   })
 })
