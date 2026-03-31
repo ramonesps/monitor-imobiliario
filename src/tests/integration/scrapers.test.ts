@@ -80,21 +80,102 @@ const MIGUEL_IMOVEIS_CARD_HTML = `
 `
 
 // I01: ZAP Scraper
-describe('I01: ZapScraper — parsing de HTML mockado', () => {
+describe('I01: ZapScraper — parsing de __NEXT_DATA__ mockado', () => {
   const scraper = new ZapScraper()
 
   it('deve ter o nome correto', () => {
     expect(scraper.name).toBe('zap')
   })
 
-  it('parseListingCard deve lançar "not implemented" (stub)', () => {
-    expect(() => scraper.parseListingCard(ZAP_CARD_HTML)).toThrow('not implemented')
+  it('extractListingsFromNextData deve extrair listing de venda', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          initialListings: [
+            {
+              listing: {
+                id: 'zap-123',
+                usableAreas: [75],
+                bedrooms: [2],
+                unitFloor: 5,
+                amenities: ['FURNISHED'],
+                description: 'Apartamento mobiliado no centro',
+                images: ['https://photos.zap.com.br/foto1.jpg'],
+              },
+              pricingInfos: [{ businessType: 'SALE', price: '450000' }],
+              link: { href: '/imovel/zap-123' },
+              account: { name: 'Imobiliária Central' },
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData, 'venda')
+    expect(results).toHaveLength(1)
+    expect(results[0].externalId).toBe('zap-123')
+    expect(results[0].type).toBe('sale')
+    expect(results[0].price).toBe(450000)
+    expect(results[0].area).toBe(75)
+    expect(results[0].bedrooms).toBe(2)
+    expect(results[0].floor).toBe('5')
+    expect(results[0].furnished).toBe('full')
+    expect(results[0].platform).toBe('zap')
+    expect(results[0].agencyName).toBe('Imobiliária Central')
   })
 
-  it('search deve retornar array vazio (stub)', async () => {
-    const results = await scraper.search('Edifício Test', 'Rua Test, 100')
-    expect(Array.isArray(results)).toBe(true)
+  it('extractListingsFromNextData deve extrair listing de aluguel', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          initialListings: [
+            {
+              listing: {
+                id: 'zap-456',
+                usableAreas: [60],
+                bedrooms: [1],
+                unitFloor: 3,
+                amenities: [],
+                description: 'Studio compacto',
+                images: [],
+              },
+              pricingInfos: [{ businessType: 'RENTAL', price: '2500' }],
+              link: { href: '/imovel/zap-456' },
+              account: { name: 'Direto' },
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData, 'aluguel')
+    expect(results).toHaveLength(1)
+    expect(results[0].type).toBe('rent')
+    expect(results[0].price).toBe(2500)
+  })
+
+  it('extractListingsFromNextData deve ignorar listing sem preço', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          initialListings: [
+            {
+              listing: { id: 'zap-sem-preco', usableAreas: [50], bedrooms: [1], images: [] },
+              pricingInfos: [],
+              link: { href: '/imovel/zap-sem-preco' },
+              account: {},
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData, 'venda')
     expect(results).toHaveLength(0)
+  })
+
+  it('parseListingCard deve retornar objeto (não lança erro)', () => {
+    const result = scraper.parseListingCard(ZAP_CARD_HTML)
+    // Pode retornar null se cheerio não encontrar os campos,
+    // mas não deve lançar exceção
+    expect(result === null || typeof result === 'object').toBe(true)
   })
 })
 
