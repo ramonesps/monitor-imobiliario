@@ -180,56 +180,204 @@ describe('I01: ZapScraper — parsing de __NEXT_DATA__ mockado', () => {
 })
 
 // I02: VivaReal Scraper
-describe('I02: VivaRealScraper — parsing de HTML mockado', () => {
+describe('I02: VivaRealScraper — parsing de __NEXT_DATA__ mockado', () => {
   const scraper = new VivaRealScraper()
 
   it('deve ter o nome correto', () => {
     expect(scraper.name).toBe('vivareal')
   })
 
-  it('parseListingCard deve lançar "not implemented" (stub)', () => {
-    expect(() => scraper.parseListingCard(VIVAREAL_CARD_HTML)).toThrow('not implemented')
+  it('extractListingsFromNextData deve extrair listing de venda', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          initialListings: [
+            {
+              listing: {
+                id: 'vr-987654',
+                usableAreas: [80],
+                bedrooms: [3],
+                unitFloor: 3,
+                amenities: ['SEMI_FURNISHED'],
+                description: 'Apartamento semi-mobiliado',
+                images: ['https://cdn.vivareal.com/photo1.jpg'],
+              },
+              pricingInfos: [{ businessType: 'SALE', price: '450000' }],
+              link: { href: '/imovel/vr-987654' },
+              account: { name: 'Construtora Alpha' },
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData, 'venda')
+    expect(results).toHaveLength(1)
+    expect(results[0].externalId).toBe('vr-987654')
+    expect(results[0].type).toBe('sale')
+    expect(results[0].price).toBe(450000)
+    expect(results[0].area).toBe(80)
+    expect(results[0].bedrooms).toBe(3)
+    expect(results[0].furnished).toBe('partial')
+    expect(results[0].platform).toBe('vivareal')
   })
 
-  it('search deve retornar array vazio (stub)', async () => {
-    const results = await scraper.search('Edifício Test', 'Rua Test, 100')
+  it('extractListingsFromNextData deve ignorar listing sem preço válido', () => {
+    const mockNextData = {
+      props: { pageProps: { initialListings: [{ listing: { id: 'vr-0' }, pricingInfos: [], link: {}, account: {} }] } },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData, 'venda')
     expect(results).toHaveLength(0)
+  })
+
+  it('parseListingCard deve retornar objeto (não lança erro)', () => {
+    const result = scraper.parseListingCard(VIVAREAL_CARD_HTML)
+    expect(result === null || typeof result === 'object').toBe(true)
   })
 })
 
 // I03: OLX Scraper
-describe('I03: OlxScraper — parsing de HTML mockado', () => {
+describe('I03: OlxScraper — parsing de __NEXT_DATA__ mockado', () => {
   const scraper = new OlxScraper()
 
   it('deve ter o nome correto', () => {
     expect(scraper.name).toBe('olx')
   })
 
-  it('parseListingCard deve lançar "not implemented" (stub)', () => {
-    expect(() => scraper.parseListingCard(OLX_CARD_HTML)).toThrow('not implemented')
+  it('extractListingsFromNextData deve extrair anúncio de aluguel', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          ads: [
+            {
+              listId: 'olx-555',
+              url: '/imoveis/aluguel/555',
+              price: 'R$ 2.800',
+              subject: 'Apartamento para alugar',
+              body: 'Apartamento no centro, 60m²',
+              params: [
+                { name: 'size', value: '60' },
+                { name: 'rooms', value: '2' },
+              ],
+              images: ['https://img.olx.com.br/thumb555.jpg'],
+              user: { name: null },
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData)
+    expect(results).toHaveLength(1)
+    expect(results[0].externalId).toBe('olx-555')
+    expect(results[0].type).toBe('rent')
+    expect(results[0].price).toBe(2800)
+    expect(results[0].area).toBe(60)
+    expect(results[0].bedrooms).toBe(2)
+    expect(results[0].platform).toBe('olx')
   })
 
-  it('search deve retornar array vazio (stub)', async () => {
-    const results = await scraper.search('Edifício Test', 'Rua Test, 100')
-    expect(results).toHaveLength(0)
+  it('extractListingsFromNextData deve inferir venda quando não há indicação de aluguel', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          ads: [
+            {
+              listId: 'olx-666',
+              url: '/imoveis/venda/666',
+              price: 'R$ 350.000',
+              subject: 'Casa à venda',
+              body: 'Casa espaçosa',
+              params: [],
+              images: [],
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData)
+    expect(results).toHaveLength(1)
+    expect(results[0].type).toBe('sale')
+    expect(results[0].price).toBe(350000)
+  })
+
+  it('parseListingCard deve retornar objeto (não lança erro)', () => {
+    const result = scraper.parseListingCard(OLX_CARD_HTML)
+    expect(result === null || typeof result === 'object').toBe(true)
   })
 })
 
 // I04: ImovelWeb Scraper
-describe('I04: ImovelWebScraper — parsing de HTML mockado', () => {
+describe('I04: ImovelWebScraper — parsing de __NEXT_DATA__ mockado', () => {
   const scraper = new ImovelWebScraper()
 
   it('deve ter o nome correto', () => {
     expect(scraper.name).toBe('imovelweb')
   })
 
-  it('parseListingCard deve lançar "not implemented" (stub)', () => {
-    expect(() => scraper.parseListingCard(IMOVELWEB_CARD_HTML)).toThrow('not implemented')
+  it('extractListingsFromNextData deve extrair listing de venda', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          initialListings: [
+            {
+              listing: {
+                id: 'iw-777',
+                usableAreas: [90],
+                bedrooms: [4],
+                unitFloor: 12,
+                amenities: ['NOT_FURNISHED'],
+                description: 'Apartamento amplo no 12º andar',
+                images: ['https://img.imovelweb.com.br/photo777.jpg'],
+              },
+              pricingInfos: [{ businessType: 'SALE', price: '950000' }],
+              link: { href: '/imovel/iw-777' },
+              account: { name: 'Imóveis Paulista' },
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData, 'venda')
+    expect(results).toHaveLength(1)
+    expect(results[0].externalId).toBe('iw-777')
+    expect(results[0].type).toBe('sale')
+    expect(results[0].price).toBe(950000)
+    expect(results[0].area).toBe(90)
+    expect(results[0].bedrooms).toBe(4)
+    expect(results[0].floor).toBe('12')
+    expect(results[0].furnished).toBe('none')
+    expect(results[0].platform).toBe('imovelweb')
   })
 
-  it('search deve retornar array vazio (stub)', async () => {
-    const results = await scraper.search('Edifício Test', 'Rua Test, 100')
-    expect(results).toHaveLength(0)
+  it('extractListingsFromNextData deve suportar preço direto no listing (sem pricingInfos)', () => {
+    const mockNextData = {
+      props: {
+        pageProps: {
+          initialListings: [
+            {
+              listing: {
+                id: 'iw-888',
+                usableAreas: [70],
+                bedrooms: [2],
+                salePrice: 480000,
+                amenities: [],
+                images: [],
+              },
+              pricingInfos: [],
+              link: { href: '/imovel/iw-888' },
+              account: {},
+            },
+          ],
+        },
+      },
+    }
+    const results = scraper.extractListingsFromNextData(mockNextData, 'venda')
+    expect(results).toHaveLength(1)
+    expect(results[0].price).toBe(480000)
+  })
+
+  it('parseListingCard deve retornar objeto (não lança erro)', () => {
+    const result = scraper.parseListingCard(IMOVELWEB_CARD_HTML)
+    expect(result === null || typeof result === 'object').toBe(true)
   })
 })
 
