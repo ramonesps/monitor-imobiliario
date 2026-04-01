@@ -46,7 +46,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copia artefatos do build
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
 COPY --from=builder /app/src/instrumentation.ts ./src/instrumentation.ts
