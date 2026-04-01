@@ -52,8 +52,15 @@ interface RawListing {
   description: string;
   agencyName?: string;
   photoUrls: string[];
-  city?: string; // extraído pelo scraper quando disponível; usado para filtro por cidade do prédio
+  city?: string;  // cidade do anúncio; extraída pelo scraper; usada para filtro e exibição
+  state?: string; // estado (UF) do anúncio
 }
+```
+
+### Notas de implementação por plataforma:
+- **ZAP / VivaReal**: migraram para Next.js App Router — não usam mais `__NEXT_DATA__`. Estratégia atual: (1) interceptar respostas JSON da API interna via `page.on('response')`, (2) fallback RSC (`self.__next_f`), (3) legacy `__NEXT_DATA__` para páginas antigas. Extrai `city` de `listing.address.city` e `state` de `listing.address.stateAcronym`.
+- **OLX**: ainda usa `__NEXT_DATA__`. Extrai `city` de `ad.location.municipality` e `state` de `ad.location.uf`.
+- **ImovelWeb, Frias Neto, Miguel Imóveis**: city/state não implementados ainda.
 ```
 
 ---
@@ -86,6 +93,8 @@ interface RawListing {
 | floor | TEXT |
 | area | REAL |
 | bedrooms | INTEGER |
+| city | TEXT (cidade do anúncio, extraída pelo scraper) |
+| state | TEXT (UF do anúncio, extraída pelo scraper) |
 | price_current | REAL |
 | price_original | REAL |
 | furnished | TEXT ('full', 'partial', 'none', 'unknown') |
@@ -144,24 +153,30 @@ interface RawListing {
 
 ```
 1. Para cada building cadastrado:
-   a. Montar queries de busca (name + address + search_terms)
+   a. Montar queries de busca:
+      - Usa building.search_terms se definido, senão usa building.name
+      - Se building.city definido, concatena à query: "Eleve Residence" + "Piracicaba" → "Eleve Residence Piracicaba"
+      - Isso filtra resultados na própria plataforma, evitando coletar anúncios de outras cidades
    b. Para cada plataforma habilitada:
-      - Buscar listagens com Playwright
-      - Extrair dados via interface RawListing
-      - Tratar erros por plataforma (se uma falha, continua nas demais)
+      - Buscar listagens com Playwright (uma query por search term)
+      - Extrair dados via interface RawListing (inclui city e state quando disponíveis)
+      - Desduplicar por externalId+platform caso múltiplos search_terms retornem o mesmo anúncio
+      - Tratar erros por plataforma (se uma falha, continua nas demais — R01)
    c. Para cada anúncio encontrado:
-      - Checar se external_url já existe em listing_sources → só atualizar last_seen_at
-      - Gerar perceptual hash das fotos (baixar + Sharp)
-      - Comparar com listings existentes do mesmo building:
-        * Fingerprint match (andar + preço ±10% + tipo) = filtro rápido
-        * Phash: hamming distance < 10 (de 64 bits) = provável mesmo imóvel
-      - Filtrar por cidade: se o anúncio tem cidade e não coincide com building.city → ignorar
+      - Filtrar por cidade: se building.city e raw.city ambos definidos e não coincidem → ignorar
+        (filtro secundário; o principal é a inclusão da cidade na query — passo 1a)
       - Filtrar por área: se building.area_min/area_max definidos e raw.area fora do range → ignorar
-      - Filtrar por preço: se building.price_min/price_max definidos e preço fora do range → ignorar
-      - Se match >= 90%: vincular como nova source do listing existente
-      - Se match 60-89%: criar duplicate_review (pending)
-      - Se match < 60%: criar novo listing
+      - Filtrar por preço por modalidade:
+        * type='rent': checar rent_price_min / rent_price_max
+        * type='sale': checar sale_price_min / sale_price_max
+      - Checar se external_id+platform já existe em listing_sources:
+        * Sim → atualizar last_seen_at + city/state (se antes eram null) + preço se mudou
+        * Não → comparar com listings existentes do building (fingerprint + similaridade):
+          - Score >= 90%: merge (nova source no listing existente, atualiza city/state)
+          - Score 60-89%: novo listing + duplicate_review pending
+          - Score < 60%: novo listing
       - Se preço mudou: registrar em price_history
+      - Salvar city e state no listing (permite exibição e filtro posterior na UI)
    d. Para listings ativos não encontrados hoje em nenhuma source:
       - Ausente 1 dia: manter ativo
       - Ausente 2+ dias: marcar inactive, setar deactivated_at
@@ -174,16 +189,17 @@ interface RawListing {
 
 | Método | Rota | Descrição |
 |---|---|---|
-| POST | /api/buildings | Cadastrar prédio (name, address, city?, searchTerms?, areaMin?, areaMax?, priceMin?, priceMax?) |
+| POST | /api/buildings | Cadastrar prédio (name, address, city?, searchTerms?, areaMin?, areaMax?, rentPriceMin?, rentPriceMax?, salePriceMin?, salePriceMax?) |
 | GET | /api/buildings | Listar prédios |
 | GET | /api/buildings/:id | Detalhe de um prédio |
-| PUT | /api/buildings/:id | Atualizar dados de um prédio |
+| PUT | /api/buildings/:id | Atualizar campos do prédio |
 | DELETE | /api/buildings/:id | Remover prédio e todos os dados associados em cascata |
-| GET | /api/buildings/:id/listings | Listar imóveis (filtros: type, status, furnished, price_min, price_max) |
+| GET | /api/buildings/:id/listings | Listar anúncios do prédio |
+| DELETE | /api/buildings/:id/listings | Limpar todos os anúncios do prédio (mantém o prédio) |
 | GET | /api/listings/:id | Detalhe de um imóvel (inclui sources, photos, price_history) |
 | GET | /api/duplicate-reviews | Listar duplicatas pendentes |
 | POST | /api/duplicate-reviews/:id | Resolver: { action: 'same' | 'different' } |
-| POST | /api/scraper/run | Trigger manual — retorna resultados por plataforma (success, newListings, updatedListings, error) |
+| POST | /api/scraper/run | Trigger manual — body: { buildingIds?, platformFilter? }; retorna resultados por plataforma (success, newListings, updatedListings, error) |
 | GET | /api/stats/:building_id | Estatísticas (média, mediana, min, max preço, tempo médio mercado) |
 
 ---
@@ -262,12 +278,16 @@ interface RawListing {
 ## 8. Telas da interface (referência dos mockups)
 
 ### 8.1 Dashboard do prédio (tela principal)
-- Header: nome do prédio + endereço + botão "Atualizar agora"
+- Header: nome do prédio + endereço completo + termos de busca
+- Filtros ativos visíveis: cidade, área min/max, preço aluguel min/max, preço venda min/max
+- Botões de ação: "Atualizar agora" (scraper), "Editar", "Limpar listagens", "Excluir"
+  - "Limpar listagens": remove todos os anúncios do prédio sem excluí-lo (útil para resetar antes de novo scrape com filtros corrigidos)
+- Painel de resultados do scraper: após "Atualizar agora", exibe por plataforma ✓ (+N novo · ↻N atual) ou ✗ (mensagem de erro legível)
 - Alerta de duplicatas pendentes (se houver)
 - 4 cards de stats: anúncios ativos, aluguel médio, venda médio/m², tempo médio no mercado
 - Tabs: Todos / Aluguel / Venda / Inativos
-- Filtros: andar, mobília, preço alterado
-- Lista de imóveis: thumb de foto, badges (tipo + plataformas), andar/área/quartos, preço + variação, dias no mercado, imobiliária
+- Ordenação por preço, área ou data (1 clique ordena, 2º clique inverte)
+- Lista de imóveis: tipo, área, quartos, descrição, cidade/estado (com alerta laranja se cidade diferente do prédio), preço
 
 ### 8.2 Detalhe do imóvel
 - Galeria de fotos
@@ -283,8 +303,11 @@ interface RawListing {
 - Score de similaridade + detalhes (hamming distance, diferença de preço)
 - Botões: "São diferentes" / "É o mesmo imóvel — unificar"
 
-### 8.4 Cadastro de prédio
-- Form: nome do prédio, endereço completo, termos alternativos de busca
+### 8.4 Cadastro / edição de prédio
+- Form: nome, endereço completo (rua, número, bairro, CEP), cidade (para filtro)
+- Termos alternativos de busca (search_terms)
+- Filtros opcionais: área mínima/máxima
+- Filtros de preço separados por modalidade: aluguel (min/max) e venda (min/max)
 
 ---
 
