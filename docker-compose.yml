@@ -18,7 +18,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: '1'
           memory: 4G
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/buildings"]
