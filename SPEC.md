@@ -52,6 +52,7 @@ interface RawListing {
   description: string;
   agencyName?: string;
   photoUrls: string[];
+  city?: string; // extraído pelo scraper quando disponível; usado para filtro por cidade do prédio
 }
 ```
 
@@ -64,8 +65,15 @@ interface RawListing {
 |---|---|
 | id | TEXT PK (UUID) |
 | name | TEXT NOT NULL |
-| address | TEXT NOT NULL |
+| address | TEXT NOT NULL (rua, número, bairro, CEP) |
+| city | TEXT (cidade para filtro — anúncios de outra cidade são ignorados) |
 | search_terms | TEXT (JSON array de termos alternativos) |
+| area_min | REAL (área mínima em m², opcional) |
+| area_max | REAL (área máxima em m², opcional) |
+| rent_price_min | REAL (preço mínimo de aluguel, opcional) |
+| rent_price_max | REAL (preço máximo de aluguel, opcional) |
+| sale_price_min | REAL (preço mínimo de venda, opcional) |
+| sale_price_max | REAL (preço máximo de venda, opcional) |
 | created_at | TEXT (ISO timestamp) |
 
 ### listings
@@ -147,6 +155,9 @@ interface RawListing {
       - Comparar com listings existentes do mesmo building:
         * Fingerprint match (andar + preço ±10% + tipo) = filtro rápido
         * Phash: hamming distance < 10 (de 64 bits) = provável mesmo imóvel
+      - Filtrar por cidade: se o anúncio tem cidade e não coincide com building.city → ignorar
+      - Filtrar por área: se building.area_min/area_max definidos e raw.area fora do range → ignorar
+      - Filtrar por preço: se building.price_min/price_max definidos e preço fora do range → ignorar
       - Se match >= 90%: vincular como nova source do listing existente
       - Se match 60-89%: criar duplicate_review (pending)
       - Se match < 60%: criar novo listing
@@ -163,14 +174,16 @@ interface RawListing {
 
 | Método | Rota | Descrição |
 |---|---|---|
-| POST | /api/buildings | Cadastrar prédio (name, address, search_terms) |
+| POST | /api/buildings | Cadastrar prédio (name, address, city?, searchTerms?, areaMin?, areaMax?, priceMin?, priceMax?) |
 | GET | /api/buildings | Listar prédios |
 | GET | /api/buildings/:id | Detalhe de um prédio |
+| PUT | /api/buildings/:id | Atualizar dados de um prédio |
+| DELETE | /api/buildings/:id | Remover prédio e todos os dados associados em cascata |
 | GET | /api/buildings/:id/listings | Listar imóveis (filtros: type, status, furnished, price_min, price_max) |
 | GET | /api/listings/:id | Detalhe de um imóvel (inclui sources, photos, price_history) |
 | GET | /api/duplicate-reviews | Listar duplicatas pendentes |
 | POST | /api/duplicate-reviews/:id | Resolver: { action: 'same' | 'different' } |
-| POST | /api/scraper/run | Trigger manual (opcional: platform filter) |
+| POST | /api/scraper/run | Trigger manual — retorna resultados por plataforma (success, newListings, updatedListings, error) |
 | GET | /api/stats/:building_id | Estatísticas (média, mediana, min, max preço, tempo médio mercado) |
 
 ---
@@ -298,15 +311,18 @@ interface RawListing {
 - I12: dedup review (score ambíguo → pending)
 - I13: API CRUD + filtros
 
-### E2E (8)
+### E2E (9)
 - E01: cadastro de prédio
 - E02: visualização de listings
 - E03: detalhe do imóvel com fotos e histórico
 - E04: gráfico de preço renderiza
 - E05: revisão de duplicata (merge)
-- E06: trigger manual do scraper
+- E06: trigger manual do scraper — botão "Atualizar agora" dispara e retorna resultado
 - E07: filtros funcionam
 - E08: link externo abre
+- E09: painel de resultados do scraper — após "Atualizar agora", cada plataforma deve mostrar ✓ (newListings + updatedListings) ou ✗ (mensagem de erro legível); deve funcionar localmente antes de commit/deploy
+
+  **Pré-condição E09:** `PLAYWRIGHT_BROWSERS_PATH` não deve estar definido no ambiente local (ou deve apontar para o caminho correto). Verificar no startup: `[playwright] Chromium OK: <path>` nos logs do servidor. Se aparecer "Chromium NÃO encontrado", desativar a variável de ambiente e executar `npx playwright install chromium` novamente.
 
 ### Resiliência (5)
 - R01: plataforma fora do ar → continua nas demais

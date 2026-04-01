@@ -26,7 +26,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, address, searchTerms } = body
+    const { name, address, city, searchTerms, areaMin, areaMax, rentPriceMin, rentPriceMax, salePriceMin, salePriceMax } = body
 
     if (!name || typeof name !== 'string' || name.trim() === '') {
       return NextResponse.json({ error: 'Campo "name" é obrigatório' }, { status: 400 })
@@ -42,17 +42,21 @@ export async function POST(req: NextRequest) {
       id,
       name: name.trim(),
       address: address.trim(),
+      city: city ? String(city).trim() : null,
       searchTerms: searchTerms ? JSON.stringify(searchTerms) : null,
+      areaMin: areaMin ? Number(areaMin) : null,
+      areaMax: areaMax ? Number(areaMax) : null,
+      rentPriceMin: rentPriceMin ? Number(rentPriceMin) : null,
+      rentPriceMax: rentPriceMax ? Number(rentPriceMax) : null,
+      salePriceMin: salePriceMin ? Number(salePriceMin) : null,
+      salePriceMax: salePriceMax ? Number(salePriceMax) : null,
       createdAt: now,
     })
 
     const [created] = await db.select().from(buildings).where(eq(buildings.id, id))
 
     return NextResponse.json(
-      {
-        ...created,
-        searchTerms: created.searchTerms ? JSON.parse(created.searchTerms) : [],
-      },
+      { ...created, searchTerms: created.searchTerms ? JSON.parse(created.searchTerms) : [] },
       { status: 201 }
     )
   } catch (error) {

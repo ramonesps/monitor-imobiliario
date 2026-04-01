@@ -32,6 +32,15 @@ import { ImovelWebScraper } from './platforms/imovelweb'
 import { FriasNetoScraper } from './platforms/frias-neto'
 import { MiguelImoveisScraper } from './platforms/miguel-imoveis'
 
+/** Normaliza string para comparação: minúsculas, sem acentos, sem espaços extras */
+function normalizeCity(city: string): string {
+  return city
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+}
+
 export const ALL_SCRAPERS: PlatformScraper[] = [
   new ZapScraper(),
   new VivaRealScraper(),
@@ -75,11 +84,57 @@ export async function runScraper(options: ScraperRunOptions = {}): Promise<Scrap
       try {
         console.log(`[runner] Iniciando ${scraper.name} para building "${building.name}"...`)
 
+        // Monta query: usa searchTerms do building se disponível, senão usa name
+        // Quando cidade configurada, inclui na query para filtrar na plataforma
+        const rawSearchTerms: string[] = building.searchTerms
+          ? (() => { try { return JSON.parse(building.searchTerms) } catch { return [] } })()
+          : []
+        const searchTerms = rawSearchTerms.length > 0 ? rawSearchTerms : [building.name]
+        const queriesWithCity = building.city
+          ? searchTerms.map((t) => `${t} ${building.city}`)
+          : searchTerms
+
         // R01: cada plataforma em try/catch individual
-        const rawListings = await scraper.search(building.name, building.address)
+        const seen = new Set<string>()
+        const rawListings: RawListing[] = []
+        for (const query of queriesWithCity) {
+          const results = await scraper.search(query, building.address)
+          for (const r of results) {
+            const key = `${r.platform}:${r.externalId}`
+            if (!seen.has(key)) {
+              seen.add(key)
+              rawListings.push(r)
+            }
+          }
+        }
         console.log(`[runner] ${scraper.name}: ${rawListings.length} anúncios encontrados`)
 
         for (const raw of rawListings) {
+          // Filtro por cidade
+          if (building.city && raw.city) {
+            if (normalizeCity(raw.city) !== normalizeCity(building.city)) {
+              console.log(
+                `[runner] Ignorando anúncio de "${raw.city}" (prédio em "${building.city}")`
+              )
+              continue
+            }
+          }
+
+          // Filtro por área (se configurado no prédio)
+          if (raw.area !== undefined) {
+            if (building.areaMin !== null && raw.area < building.areaMin) continue
+            if (building.areaMax !== null && raw.area > building.areaMax) continue
+          }
+
+          // Filtro por preço separado por modalidade
+          if (raw.type === 'rent') {
+            if (building.rentPriceMin !== null && raw.price < building.rentPriceMin) continue
+            if (building.rentPriceMax !== null && raw.price > building.rentPriceMax) continue
+          } else {
+            if (building.salePriceMin !== null && raw.price < building.salePriceMin) continue
+            if (building.salePriceMax !== null && raw.price > building.salePriceMax) continue
+          }
+
           const counts = await processRawListing(raw, building.id, today)
           result.newListings += counts.new
           result.updatedListings += counts.updated
@@ -135,9 +190,14 @@ async function processRawListing(
       .set({ lastSeenAt: now })
       .where(eq(listingSources.id, existingSource.id))
 
+    // Atualiza cidade/estado se ainda não estavam preenchidos
+    const cityUpdate: Record<string, unknown> = { lastSeenAt: now }
+    if (raw.city) cityUpdate.city = raw.city
+    if (raw.state) cityUpdate.state = raw.state
+
     await db
       .update(listings)
-      .set({ lastSeenAt: now })
+      .set(cityUpdate)
       .where(eq(listings.id, existingSource.listingId))
 
     const [parent] = await db
@@ -220,9 +280,13 @@ async function processRawListing(
       lastSeenAt: now,
     })
 
+    const mergeUpdate: Record<string, unknown> = { lastSeenAt: now }
+    if (raw.city) mergeUpdate.city = raw.city
+    if (raw.state) mergeUpdate.state = raw.state
+
     await db
       .update(listings)
-      .set({ lastSeenAt: now })
+      .set(mergeUpdate)
       .where(eq(listings.id, bestMatch.id))
 
     console.log(
@@ -243,6 +307,8 @@ async function processRawListing(
     floor: raw.floor ?? null,
     area: raw.area ?? null,
     bedrooms: raw.bedrooms ?? null,
+    city: raw.city ?? null,
+    state: raw.state ?? null,
     priceCurrent: raw.price,
     priceOriginal: raw.price,
     furnished: raw.furnished,

@@ -10,7 +10,14 @@ export const buildings = sqliteTable('buildings', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   address: text('address').notNull(),
+  city: text('city'), // cidade extraída do endereço para filtro
   searchTerms: text('search_terms'), // JSON array serializado
+  areaMin: real('area_min'), // área mínima em m² (filtro opcional)
+  areaMax: real('area_max'), // área máxima em m² (filtro opcional)
+  rentPriceMin: real('rent_price_min'), // preço mínimo de aluguel (filtro opcional)
+  rentPriceMax: real('rent_price_max'), // preço máximo de aluguel (filtro opcional)
+  salePriceMin: real('sale_price_min'), // preço mínimo de venda (filtro opcional)
+  salePriceMax: real('sale_price_max'), // preço máximo de venda (filtro opcional)
   createdAt: text('created_at').notNull(),
 })
 
@@ -27,6 +34,8 @@ export const listings = sqliteTable('listings', {
   floor: text('floor'),
   area: real('area'),
   bedrooms: integer('bedrooms'),
+  city: text('city'),  // cidade extraída pelo scraper
+  state: text('state'), // estado (UF) extraído pelo scraper
   priceCurrent: real('price_current').notNull(),
   priceOriginal: real('price_original').notNull(),
   furnished: text('furnished').notNull(), // 'full' | 'partial' | 'none' | 'unknown'
@@ -103,6 +112,7 @@ export const duplicateReviews = sqliteTable('duplicate_reviews', {
 // ============================================================
 export type Building = typeof buildings.$inferSelect
 export type NewBuilding = typeof buildings.$inferInsert
+export type BuildingUpdate = Partial<Omit<NewBuilding, 'id' | 'createdAt'>>
 export type Listing = typeof listings.$inferSelect
 export type NewListing = typeof listings.$inferInsert
 export type ListingSource = typeof listingSources.$inferSelect

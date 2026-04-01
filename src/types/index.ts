@@ -20,7 +20,14 @@ export interface Building {
   id: string
   name: string
   address: string
+  city: string | null
   searchTerms: string[] // JSON array
+  areaMin: number | null
+  areaMax: number | null
+  rentPriceMin: number | null
+  rentPriceMax: number | null
+  salePriceMin: number | null
+  salePriceMax: number | null
   createdAt: string // ISO timestamp
 }
 
@@ -32,6 +39,8 @@ export interface Listing {
   floor: string | null
   area: number | null
   bedrooms: number | null
+  city: string | null
+  state: string | null
   priceCurrent: number
   priceOriginal: number
   furnished: FurnishedStatus
@@ -98,6 +107,8 @@ export interface RawListing {
   description: string
   agencyName?: string
   photoUrls: string[]
+  city?: string  // cidade do anúncio; usado para filtro e exibição
+  state?: string // estado (UF)
 }
 
 export interface PlatformScraper {

@@ -140,6 +140,9 @@ export class OlxScraper extends BaseScraper {
           .filter(Boolean)
           .slice(0, 10)
 
+        const olxCity = ad.location?.municipality ?? ad.location?.city ?? ad.municipality ?? null
+        const olxState = ad.location?.uf ?? ad.location?.state ?? ad.uf ?? null
+
         results.push({
           externalId: adId,
           externalUrl,
@@ -153,6 +156,8 @@ export class OlxScraper extends BaseScraper {
           description: String(ad.body ?? ad.description ?? ad.subject ?? '').slice(0, 2000),
           agencyName: ad.user?.name ?? ad.professionalAd ? 'Imobiliária' : undefined,
           photoUrls: images,
+          city: olxCity ? String(olxCity) : undefined,
+          state: olxState ? String(olxState) : undefined,
         })
       } catch (err) {
         this.logParseError('ad', ad?.listId ?? '?', err)

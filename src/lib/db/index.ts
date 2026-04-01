@@ -27,7 +27,14 @@ export async function initDb() {
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       address TEXT NOT NULL,
+      city TEXT,
       search_terms TEXT,
+      area_min REAL,
+      area_max REAL,
+      rent_price_min REAL,
+      rent_price_max REAL,
+      sale_price_min REAL,
+      sale_price_max REAL,
       created_at TEXT NOT NULL
     );
 
@@ -39,6 +46,8 @@ export async function initDb() {
       floor TEXT,
       area REAL,
       bedrooms INTEGER,
+      city TEXT,
+      state TEXT,
       price_current REAL NOT NULL,
       price_original REAL NOT NULL,
       furnished TEXT NOT NULL DEFAULT 'unknown',
@@ -88,6 +97,29 @@ export async function initDb() {
       created_at TEXT NOT NULL
     );
   `)
+
+  // Migra colunas adicionadas após a criação inicial (seguro para DBs existentes)
+  const newColumns = [
+    'ALTER TABLE buildings ADD COLUMN city TEXT',
+    'ALTER TABLE buildings ADD COLUMN area_min REAL',
+    'ALTER TABLE buildings ADD COLUMN area_max REAL',
+    // price_min/price_max foram substituídos por rent/sale específicos — manter para DBs antigos
+    'ALTER TABLE buildings ADD COLUMN price_min REAL',
+    'ALTER TABLE buildings ADD COLUMN price_max REAL',
+    'ALTER TABLE buildings ADD COLUMN rent_price_min REAL',
+    'ALTER TABLE buildings ADD COLUMN rent_price_max REAL',
+    'ALTER TABLE buildings ADD COLUMN sale_price_min REAL',
+    'ALTER TABLE buildings ADD COLUMN sale_price_max REAL',
+    'ALTER TABLE listings ADD COLUMN city TEXT',
+    'ALTER TABLE listings ADD COLUMN state TEXT',
+  ]
+  for (const sql of newColumns) {
+    try {
+      await client.execute(sql)
+    } catch {
+      // Coluna já existe — ignorar
+    }
+  }
 }
 
 export default db

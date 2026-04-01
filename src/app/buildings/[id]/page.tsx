@@ -2,12 +2,13 @@
 export const dynamic = 'force-dynamic'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, RefreshCw, Home, TrendingUp, Clock, AlertTriangle } from 'lucide-react'
-import { eq, and, sql } from 'drizzle-orm'
+import { ArrowLeft, Home, Clock, AlertTriangle } from 'lucide-react'
+import { eq } from 'drizzle-orm'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ScraperRunButton } from '@/components/scraper-run-button'
+import { ListingsDisplay } from '@/components/listings-display'
+import { BuildingActions } from '@/components/building-actions'
 import db from '@/lib/db'
 import { buildings, listings, duplicateReviews } from '@/lib/db/schema'
 
@@ -27,7 +28,6 @@ async function getBuildingListings(buildingId: string) {
 }
 
 async function getPendingDuplicates(buildingId: string) {
-  // Conta duplicatas pendentes que envolvem listings deste prédio
   const buildingListings = await db
     .select({ id: listings.id })
     .from(listings)
@@ -41,13 +41,15 @@ async function getPendingDuplicates(buildingId: string) {
     .from(duplicateReviews)
     .where(eq(duplicateReviews.status, 'pending'))
 
-  return pending.filter(
-    (d) => ids.includes(d.listingAId) || ids.includes(d.listingBId)
-  ).length
+  return pending.filter((d) => ids.includes(d.listingAId) || ids.includes(d.listingBId)).length
 }
 
 function formatPrice(price: number) {
-  return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
+  return price.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    maximumFractionDigits: 0,
+  })
 }
 
 function avgOrNull(values: number[]) {
@@ -74,6 +76,25 @@ export default async function BuildingPage({ params }: Params) {
   const daysOnMarket = inactive.filter((l) => l.daysOnMarket !== null).map((l) => l.daysOnMarket!)
   const avgDays = avgOrNull(daysOnMarket)
 
+  // Badges de filtros ativos
+  const filters: string[] = []
+  if (building.city) filters.push(`Cidade: ${building.city}`)
+  if (building.areaMin || building.areaMax) {
+    filters.push(
+      `Área: ${building.areaMin ?? '–'} – ${building.areaMax ?? '–'} m²`
+    )
+  }
+  if (building.rentPriceMin || building.rentPriceMax) {
+    filters.push(
+      `Aluguel: ${building.rentPriceMin ? formatPrice(building.rentPriceMin) : '–'} – ${building.rentPriceMax ? formatPrice(building.rentPriceMax) : '–'}`
+    )
+  }
+  if (building.salePriceMin || building.salePriceMax) {
+    filters.push(
+      `Venda: ${building.salePriceMin ? formatPrice(building.salePriceMin) : '–'} – ${building.salePriceMax ? formatPrice(building.salePriceMax) : '–'}`
+    )
+  }
+
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 py-10">
@@ -89,8 +110,8 @@ export default async function BuildingPage({ params }: Params) {
         </div>
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div>
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold tracking-tight">{building.name}</h1>
             <p className="text-muted-foreground text-sm mt-0.5">{building.address}</p>
             {building.searchTerms.length > 0 && (
@@ -98,14 +119,16 @@ export default async function BuildingPage({ params }: Params) {
                 Busca: {building.searchTerms.join(', ')}
               </p>
             )}
+            {filters.length > 0 && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Filtros ativos: {filters.join(' · ')}
+              </p>
+            )}
           </div>
-          <form action={`/api/scraper/run`} method="POST">
-            <input type="hidden" name="buildingId" value={building.id} />
-            <Button variant="outline" size="sm" type="submit">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Atualizar agora
-            </Button>
-          </form>
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            <ScraperRunButton buildingId={building.id} />
+            <BuildingActions building={building} />
+          </div>
         </div>
 
         {/* Alerta de duplicatas */}
@@ -201,75 +224,19 @@ export default async function BuildingPage({ params }: Params) {
             <TabsTrigger value="inactive">Inativos ({inactive.length})</TabsTrigger>
           </TabsList>
 
-          {[
-            { value: 'all', items: active },
-            { value: 'rent', items: rentListings },
-            { value: 'sale', items: saleListings },
-            { value: 'inactive', items: inactive },
-          ].map(({ value, items }) => (
+          {(
+            [
+              { value: 'all', items: active },
+              { value: 'rent', items: rentListings },
+              { value: 'sale', items: saleListings },
+              { value: 'inactive', items: inactive },
+            ] as const
+          ).map(({ value, items }) => (
             <TabsContent key={value} value={value}>
-              {items.length === 0 ? (
-                <p className="text-center text-muted-foreground py-10 text-sm">
-                  Nenhum anúncio nesta categoria.
-                </p>
-              ) : (
-                <div className="space-y-3">
-                  {items.map((listing) => (
-                    <Link key={listing.id} href={`/listings/${listing.id}`}>
-                      <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                        <CardContent className="pt-4 pb-4">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 flex-wrap mb-1">
-                                <Badge variant={listing.type === 'rent' ? 'rent' : 'sale'}>
-                                  {listing.type === 'rent' ? 'Aluguel' : 'Venda'}
-                                </Badge>
-                                {listing.status === 'inactive' && (
-                                  <Badge variant="inactive">Inativo</Badge>
-                                )}
-                                {listing.floor && (
-                                  <span className="text-xs text-muted-foreground">
-                                    {listing.floor}º andar
-                                  </span>
-                                )}
-                                {listing.area && (
-                                  <span className="text-xs text-muted-foreground">
-                                    {listing.area} m²
-                                  </span>
-                                )}
-                                {listing.bedrooms && (
-                                  <span className="text-xs text-muted-foreground">
-                                    {listing.bedrooms} dorm.
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-xs text-muted-foreground truncate">
-                                {listing.description || 'Sem descrição'}
-                              </p>
-                            </div>
-                            <div className="text-right shrink-0">
-                              <p className="font-semibold text-base">
-                                {formatPrice(listing.priceCurrent)}
-                              </p>
-                              {listing.priceCurrent !== listing.priceOriginal && (
-                                <p className="text-xs text-muted-foreground line-through">
-                                  {formatPrice(listing.priceOriginal)}
-                                </p>
-                              )}
-                              {listing.daysOnMarket !== null && (
-                                <p className="text-xs text-muted-foreground mt-1 flex items-center justify-end gap-1">
-                                  <Clock className="h-3 w-3" />
-                                  {listing.daysOnMarket}d
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  ))}
-                </div>
-              )}
+              <ListingsDisplay
+                listings={items as import('@/types').Listing[]}
+                buildingCity={building.city}
+              />
             </TabsContent>
           ))}
         </Tabs>

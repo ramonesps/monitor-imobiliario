@@ -1,49 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { eq, and, gte, lte } from 'drizzle-orm'
+import { eq, inArray } from 'drizzle-orm'
 import db from '@/lib/db'
-import { listings, buildings } from '@/lib/db/schema'
-import type { ListingType, ListingStatus, FurnishedStatus } from '@/types'
+import {
+  buildings,
+  listings,
+  listingSources,
+  priceHistory,
+  listingPhotos,
+  duplicateReviews,
+} from '@/lib/db/schema'
 
 type Params = { params: { id: string } }
 
-// GET /api/buildings/:id/listings — lista imóveis com filtros opcionais
-// Query params: type, status, furnished, price_min, price_max
-export async function GET(req: NextRequest, { params }: Params) {
+// GET /api/buildings/:id/listings
+export async function GET(_req: NextRequest, { params }: Params) {
   try {
-    // Verifica se o prédio existe
-    const [building] = await db
-      .select()
-      .from(buildings)
-      .where(eq(buildings.id, params.id))
-
-    if (!building) {
-      return NextResponse.json({ error: 'Prédio não encontrado' }, { status: 404 })
-    }
-
-    const { searchParams } = req.nextUrl
-    const type = searchParams.get('type') as ListingType | null
-    const status = searchParams.get('status') as ListingStatus | null
-    const furnished = searchParams.get('furnished') as FurnishedStatus | null
-    const priceMin = searchParams.get('price_min') ? Number(searchParams.get('price_min')) : null
-    const priceMax = searchParams.get('price_max') ? Number(searchParams.get('price_max')) : null
-
-    const conditions = [eq(listings.buildingId, params.id)]
-
-    if (type) conditions.push(eq(listings.type, type))
-    if (status) conditions.push(eq(listings.status, status))
-    if (furnished) conditions.push(eq(listings.furnished, furnished))
-    if (priceMin !== null) conditions.push(gte(listings.priceCurrent, priceMin))
-    if (priceMax !== null) conditions.push(lte(listings.priceCurrent, priceMax))
-
-    const rows = await db
+    const buildingListings = await db
       .select()
       .from(listings)
-      .where(and(...conditions))
-      .orderBy(listings.lastSeenAt)
-
-    return NextResponse.json({ listings: rows, total: rows.length })
+      .where(eq(listings.buildingId, params.id))
+    return NextResponse.json({ listings: buildingListings })
   } catch (error) {
-    console.error('[GET /api/buildings/:id/listings]', error)
-    return NextResponse.json({ error: 'Erro ao listar imóveis' }, { status: 500 })
+    return NextResponse.json({ error: 'Erro ao buscar anuncios' }, { status: 500 })
+  }
+}
+
+// DELETE /api/buildings/:id/listings — limpa todos os anuncios do predio (mantém o predio)
+export async function DELETE(_req: NextRequest, { params }: Params) {
+  try {
+    const [existing] = await db.select().from(buildings).where(eq(buildings.id, params.id))
+    if (!existing) return NextResponse.json({ error: 'Predio nao encontrado' }, { status: 404 })
+
+    const rows = await db.select({ id: listings.id }).from(listings).where(eq(listings.buildingId, params.id))
+    const listingIds = rows.map((l) => l.id)
+    if (listingIds.length === 0) return NextResponse.json({ ok: true, deleted: 0 })
+
+    const sources = await db.select({ id: listingSources.id }).from(listingSources).where(inArray(listingSources.listingId, listingIds))
+    const sourceIds = sources.map((s) => s.id)
+
+    await db.delete(listingPhotos).where(inArray(listingPhotos.listingId, listingIds))
+    if (sourceIds.length > 0) await db.delete(priceHistory).where(inArray(priceHistory.sourceId, sourceIds))
+    await db.delete(duplicateReviews).where(inArray(duplicateReviews.listingAId, listingIds))
+    await db.delete(duplicateReviews).where(inArray(duplicateReviews.listingBId, listingIds))
+    await db.delete(listingSources).where(inArray(listingSources.listingId, listingIds))
+    await db.delete(listings).where(eq(listings.buildingId, params.id))
+
+    return NextResponse.json({ ok: true, deleted: listingIds.length })
+  } catch (error) {
+    return NextResponse.json({ error: 'Erro ao limpar anuncios' }, { status: 500 })
   }
 }
