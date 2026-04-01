@@ -29,6 +29,8 @@ RUN npm run build
 FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+# Caminho fixo para o Chromium — evita usar home do usuário sistema (/nonexistent)
+ENV PLAYWRIGHT_BROWSERS_PATH=/app/.playwright
 
 # Dependências do sistema necessárias em runtime
 # (Playwright Chromium + Sharp)
@@ -50,21 +52,20 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
 COPY --from=builder /app/src/instrumentation.ts ./src/instrumentation.ts
 
-# Instala Playwright Chromium (após copiar node_modules)
+# Instala Playwright Chromium como root no caminho fixo
 RUN npx playwright install --with-deps chromium
 
 # Volume para banco + fotos (dados persistentes)
 VOLUME /app/data
 
-# Pasta de fotos
-RUN mkdir -p /app/data/photos
-
-EXPOSE 3000
-
-# Usuário não-root para segurança
-RUN addgroup --system --gid 1001 nodejs \
+# Pasta de fotos e ajuste de permissões
+RUN mkdir -p /app/data/photos /app/.playwright \
+    && addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs \
     && chown -R nextjs:nodejs /app
+
 USER nextjs
+
+EXPOSE 3000
 
 CMD ["npm", "start"]
