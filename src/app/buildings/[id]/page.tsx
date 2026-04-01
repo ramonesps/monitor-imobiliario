@@ -1,4 +1,5 @@
 // Página do prédio: stats + lista de imóveis
+export const dynamic = 'force-dynamic'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, RefreshCw, Home, TrendingUp, Clock, AlertTriangle } from 'lucide-react'

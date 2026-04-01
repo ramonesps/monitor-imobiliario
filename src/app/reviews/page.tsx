@@ -1,4 +1,5 @@
 // Página de revisão de duplicatas
+export const dynamic = 'force-dynamic'
 // Exibe pares de listings suspeitos lado a lado para revisão manual
 
 import Link from 'next/link'

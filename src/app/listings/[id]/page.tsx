@@ -1,4 +1,5 @@
 // Página de detalhe do imóvel
+export const dynamic = 'force-dynamic'
 // Galeria de fotos, dados, histórico de preço, fontes
 
 import { notFound } from 'next/navigation'

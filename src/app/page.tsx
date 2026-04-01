@@ -1,4 +1,5 @@
 // Dashboard principal — lista de prédios monitorados
+export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { Building2, MapPin, Plus } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
