@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { PriceChart } from '@/components/price-chart'
 import db from '@/lib/db'
-import { listings, listingSources, priceHistory, buildings } from '@/lib/db/schema'
+import { listings, listingSources, priceHistory, buildings, listingPhotos } from '@/lib/db/schema'
 
 type Params = { params: { id: string } }
 
@@ -42,22 +42,21 @@ async function getListingDetail(id: string) {
   const [listing] = await db.select().from(listings).where(eq(listings.id, id))
   if (!listing) return null
 
-  const [building] = await db.select().from(buildings).where(eq(buildings.id, listing.buildingId))
-  const sources = await db.select().from(listingSources).where(eq(listingSources.listingId, id))
-  const history = await db
-    .select()
-    .from(priceHistory)
-    .where(eq(priceHistory.listingId, id))
-    .orderBy(priceHistory.recordedAt)
+  const [[building], sources, history, photos] = await Promise.all([
+    db.select().from(buildings).where(eq(buildings.id, listing.buildingId)),
+    db.select().from(listingSources).where(eq(listingSources.listingId, id)),
+    db.select().from(priceHistory).where(eq(priceHistory.listingId, id)).orderBy(priceHistory.recordedAt),
+    db.select().from(listingPhotos).where(eq(listingPhotos.listingId, id)).orderBy(listingPhotos.orderIndex),
+  ])
 
-  return { listing, building, sources, history }
+  return { listing, building, sources, history, photos }
 }
 
 export default async function ListingPage({ params }: Params) {
   const detail = await getListingDetail(params.id)
   if (!detail) notFound()
 
-  const { listing, building, sources, history } = detail
+  const { listing, building, sources, history, photos } = detail
   const priceChanged = listing.priceCurrent !== listing.priceOriginal
 
   return (
@@ -112,6 +111,36 @@ export default async function ListingPage({ params }: Params) {
             </Link>
           )}
         </div>
+
+        {/* Galeria de fotos */}
+        {photos.length > 0 && (
+          <div className="mb-6 space-y-2">
+            {/* Foto principal */}
+            <a href={photos[0].urlOriginal} target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photos[0].urlOriginal}
+                alt="Foto principal"
+                className="w-full h-64 object-cover rounded-lg"
+              />
+            </a>
+            {/* Demais fotos */}
+            {photos.length > 1 && (
+              <div className="grid grid-cols-3 gap-2">
+                {photos.slice(1).map((photo, i) => (
+                  <a key={photo.id} href={photo.urlOriginal} target="_blank" rel="noopener noreferrer">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo.urlOriginal}
+                      alt={`Foto ${i + 2}`}
+                      className="w-full h-24 object-cover rounded-lg"
+                    />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Dados do imóvel */}
         <Card className="mb-6">

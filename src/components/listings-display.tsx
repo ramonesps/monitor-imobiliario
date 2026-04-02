@@ -54,13 +54,14 @@ interface ListingsDisplayProps {
   listings: Listing[]
   /** Cidade esperada do prédio (para destacar anúncios de outras cidades) */
   buildingCity?: string | null
+  photosByListingId?: Record<string, string[]>
 }
 
 function normalizeCity(city: string) {
   return city.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
 }
 
-export function ListingsDisplay({ listings, buildingCity }: ListingsDisplayProps) {
+export function ListingsDisplay({ listings, buildingCity, photosByListingId }: ListingsDisplayProps) {
   const [sortField, setSortField] = useState<SortField>('date')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
 
@@ -125,6 +126,22 @@ export function ListingsDisplay({ listings, buildingCity }: ListingsDisplayProps
             <Link key={listing.id} href={`/listings/${listing.id}`}>
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardContent className="pt-4 pb-4">
+                  {(() => {
+                    const photos = photosByListingId?.[listing.id] ?? []
+                    return photos.length > 0 ? (
+                      <div className="flex gap-1.5 mb-3">
+                        {photos.map((url, i) => (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            key={i}
+                            src={url}
+                            alt=""
+                            className="h-16 w-24 object-cover rounded"
+                          />
+                        ))}
+                      </div>
+                    ) : null
+                  })()}
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
