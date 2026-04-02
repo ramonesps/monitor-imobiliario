@@ -104,7 +104,26 @@
       "Bash(\"C:/Users/ramon/monitor-imobiliario/git-diff-stat-out.txt\")",
       "Bash(\"C:/Users/ramon/monitor-imobiliario/git-log-out.txt\")",
       "Bash(git -C \"C:/Users/ramon/monitor-imobiliario\" add .claude/settings.local.json SPEC.md package.json \"src/app/api/buildings/[id]/listings/route.ts\" \"src/app/api/buildings/[id]/route.ts\" src/app/api/buildings/route.ts \"src/app/buildings/[id]/page.tsx\" src/components/building-form.tsx src/instrumentation.ts src/lib/db/index.ts src/lib/db/schema.ts src/lib/scraper/platforms/olx.ts src/lib/scraper/platforms/vivareal.ts src/lib/scraper/platforms/zap.ts src/lib/scraper/runner.ts src/types/index.ts src/components/building-actions.tsx src/components/listings-display.tsx src/components/scraper-run-button.tsx \"src/components/ui/dialog.tsx\")",
-      "Bash(\"C:/Users/ramon/monitor-imobiliario/git-add2-out.txt\")"
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/git-add2-out.txt\")",
+      "Bash(git -C:*)",
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/git-commit2-out.txt\")",
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/git-push2-out.txt\")",
+      "Bash(printf \"testing\\\\n\")",
+      "Bash(git version:*)",
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/cmd_out.txt\")",
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/cmd_out2.txt\")",
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/cmd_out3.txt\")",
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/cmd_out4.txt\")",
+      "Bash(find /c/Users/ramon/monitor-imobiliario -type f \\\\\\(-name *migration* -o -name *.migrations* -o -path */migrations/* \\\\\\))",
+      "Bash(npm test:*)",
+      "Bash(cmd /c \"dir /s /b *.test.ts 2>&1 && echo DONE\")",
+      "Bash(node_modules/.bin/vitest run:*)",
+      "Bash(powershell -Command \"node_modules/.bin/vitest run --reporter=verbose 2>&1 | Out-String\")",
+      "Bash(powershell -Command \"& { $r = & node_modules/.bin/vitest run --reporter=verbose 2>&1; $r | Out-File -FilePath vitest-out.txt -Encoding utf8; Write-Output ''done'' }\")",
+      "Bash(node -e \"console.log\\(''node ok''\\)\")",
+      "Bash(printf 'test\\\\n')",
+      "Bash(bash \"C:/Users/ramon/monitor-imobiliario/run-git-sequence.sh\")",
+      "Bash(\"C:/Users/ramon/monitor-imobiliario/seq-out.txt\")"
     ]
   }
 }

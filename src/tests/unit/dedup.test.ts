@@ -62,6 +62,8 @@ describe('U09: calculateSimilarity — scores corretos por tipo de match', () =>
     price: 3500,
     area: 75,
     bedrooms: 2,
+    bathrooms: 2,
+    garages: 1,
     phashes: ['abcdef1234567890'],
   }
 
@@ -77,6 +79,8 @@ describe('U09: calculateSimilarity — scores corretos por tipo de match', () =>
       price: 4000, // Preço diferente
       area: 75,
       bedrooms: 2,
+      bathrooms: 2,
+      garages: 1,
       phashes: ['1111111111111111'], // Foto diferente
     }
     const score = calculateSimilarity(perfectMatch, partial)
@@ -91,6 +95,8 @@ describe('U09: calculateSimilarity — scores corretos por tipo de match', () =>
       price: 800000, // Preço muito diferente
       area: 120, // Área diferente
       bedrooms: 4, // Quartos diferentes
+      bathrooms: null,
+      garages: null,
       phashes: ['ffffffffffffffff'], // Foto completamente diferente de '0000...'
     }
     const differentListing: ListingFingerprint = {
@@ -99,6 +105,8 @@ describe('U09: calculateSimilarity — scores corretos por tipo de match', () =>
       price: 2000,
       area: 45,
       bedrooms: 1,
+      bathrooms: null,
+      garages: null,
       phashes: ['0000000000000000'],
     }
     const score = calculateSimilarity(noMatch, differentListing)

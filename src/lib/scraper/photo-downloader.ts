@@ -1,10 +1,14 @@
 // Download e salvamento de fotos de anúncios
 // R03: foto 404 → pula, continua
+// M02: isPhotoStored evita redownload de fotos já existentes em listing_photos
 
 import path from 'path'
 import fs from 'fs'
 import https from 'https'
 import http from 'http'
+import { eq } from 'drizzle-orm'
+import db from '@/lib/db'
+import { listingPhotos } from '@/lib/db/schema'
 
 const PHOTOS_DIR = process.env.PHOTOS_DIR || './data/photos'
 
@@ -67,6 +71,18 @@ export async function downloadPhoto(url: string, destPath: string): Promise<stri
     console.error(`[photo-downloader] Erro inesperado para ${url}:`, error)
     return null
   }
+}
+
+/**
+ * M02: verifica se uma URL já está registrada em listing_photos.
+ * Usada para evitar redownload em atualizações diárias (U14).
+ */
+export async function isPhotoStored(urlOriginal: string): Promise<boolean> {
+  const [existing] = await db
+    .select({ id: listingPhotos.id })
+    .from(listingPhotos)
+    .where(eq(listingPhotos.urlOriginal, urlOriginal))
+  return !!existing
 }
 
 /**

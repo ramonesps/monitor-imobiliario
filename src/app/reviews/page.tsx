@@ -22,6 +22,8 @@ interface ListingDetail {
   floor: string | null
   area: number | null
   bedrooms: number | null
+  bathrooms: number | null  // M01
+  garages: number | null    // M01
   priceCurrent: number
   priceOriginal: number
   furnished: string
@@ -88,6 +90,12 @@ function ListingCard({ listing }: { listing: ListingDetail }) {
 
         <span className="text-muted-foreground">Quartos</span>
         <span>{listing.bedrooms ?? '—'}</span>
+
+        <span className="text-muted-foreground">Banheiros</span>
+        <span>{listing.bathrooms ?? '—'}</span>
+
+        <span className="text-muted-foreground">Vagas</span>
+        <span>{listing.garages ?? '—'}</span>
 
         <span className="text-muted-foreground">Mobília</span>
         <span>{furnishedLabel(listing.furnished)}</span>

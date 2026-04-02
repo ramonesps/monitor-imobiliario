@@ -7,6 +7,7 @@ import {
   buildings,
   listings,
   listingSources,
+  listingPhotos,
   priceHistory,
   duplicateReviews,
 } from '@/lib/db/schema'
@@ -25,6 +26,7 @@ import type {
   ScraperRunOptions,
   ScraperRunResult,
 } from '@/types'
+import { downloadPhoto, getPhotoDestPath, isPhotoStored } from './photo-downloader'
 import { ZapScraper } from './platforms/zap'
 import { VivaRealScraper } from './platforms/vivareal'
 import { OlxScraper } from './platforms/olx'
@@ -109,6 +111,65 @@ export async function runScraper(options: ScraperRunOptions = {}): Promise<Scrap
         }
         console.log(`[runner] ${scraper.name}: ${rawListings.length} anúncios encontrados`)
 
+        // M01/M02: fila de fetchDetail para listings novos com campos ou fotos ausentes
+        // Identifica quais precisam de detail fetch (plataforma implementa fetchDetail)
+        const needsDetail = rawListings.filter((raw) => {
+          if (!('fetchDetail' in scraper)) return false
+          const needsFields =
+            raw.descriptionFull === undefined ||
+            raw.bathrooms === undefined ||
+            raw.garages === undefined ||
+            raw.bedrooms === undefined
+          // M02: listings sem fotos na página de busca precisam visitar o detalhe
+          const needsPhotos = (raw.photoUrls ?? []).length === 0
+          return needsFields || needsPhotos
+        })
+
+        if (needsDetail.length > 0 && 'fetchDetail' in scraper) {
+          // Verifica quais ainda são novos (source não existe) para não rebuscar existentes
+          const newOnes: RawListing[] = []
+          for (const raw of needsDetail) {
+            const [existing] = await db
+              .select()
+              .from(listingSources)
+              .where(
+                and(
+                  eq(listingSources.externalId, raw.externalId),
+                  eq(listingSources.platform, raw.platform)
+                )
+              )
+            if (!existing) newOnes.push(raw)
+          }
+
+          // Rate limit: 3 simultâneos por plataforma, timeout 10s por fetch
+          for (let i = 0; i < newOnes.length; i += 3) {
+            const batch = newOnes.slice(i, i + 3)
+            await Promise.all(
+              batch.map(async (raw) => {
+                try {
+                  const detail = await Promise.race([
+                    (scraper as PlatformScraper & { fetchDetail: (url: string) => Promise<Partial<RawListing>> }).fetchDetail(raw.externalUrl),
+                    new Promise<Partial<RawListing>>((_, reject) =>
+                      setTimeout(() => reject(new Error('timeout')), 10000)
+                    ),
+                  ])
+                  // Mescla campos do detail somente se ausentes no raw
+                  if (detail.bathrooms !== undefined && raw.bathrooms === undefined) raw.bathrooms = detail.bathrooms
+                  if (detail.garages !== undefined && raw.garages === undefined) raw.garages = detail.garages
+                  if (detail.bedrooms !== undefined && raw.bedrooms === undefined) raw.bedrooms = detail.bedrooms
+                  if (detail.listedAt !== undefined && raw.listedAt === undefined) raw.listedAt = detail.listedAt
+                  if (detail.advertiserName !== undefined && raw.advertiserName === undefined) raw.advertiserName = detail.advertiserName
+                  if (detail.descriptionFull !== undefined && raw.descriptionFull === undefined) raw.descriptionFull = detail.descriptionFull
+                  // M02: substitui thumbnails pelas fotos full-res do carrossel
+                  if (detail.photoUrls !== undefined && detail.photoUrls.length > 0) raw.photoUrls = detail.photoUrls
+                } catch (err) {
+                  console.warn(`[runner] fetchDetail timeout/erro para ${raw.externalId}: ${err}`)
+                }
+              })
+            )
+          }
+        }
+
         for (const raw of rawListings) {
           // Filtro por cidade
           if (building.city && raw.city) {
@@ -138,6 +199,11 @@ export async function runScraper(options: ScraperRunOptions = {}): Promise<Scrap
           const counts = await processRawListing(raw, building.id, today)
           result.newListings += counts.new
           result.updatedListings += counts.updated
+
+          // M02: baixar fotos para o listing processado (dedup via isPhotoStored)
+          if (counts.listingId && raw.photoUrls && raw.photoUrls.length > 0) {
+            await downloadAndSavePhotos(counts.listingId, raw.photoUrls)
+          }
         }
 
         result.success = true
@@ -172,7 +238,7 @@ async function processRawListing(
   raw: RawListing,
   buildingId: string,
   now: string
-): Promise<{ new: number; updated: number }> {
+): Promise<{ new: number; updated: number; listingId: string | null }> {
   // R05: verifica se a source já existe pelo externalId + platform
   const [existingSource] = await db
     .select()
@@ -185,9 +251,14 @@ async function processRawListing(
     )
 
   if (existingSource) {
+    // M01: atualiza source com listedAt/advertiserName se ainda não preenchidos
+    const sourceUpdate: Record<string, unknown> = { lastSeenAt: now }
+    if (raw.listedAt && !existingSource.listedAt) sourceUpdate.listedAt = raw.listedAt
+    if (raw.advertiserName && !existingSource.advertiserName) sourceUpdate.advertiserName = raw.advertiserName
+
     await db
       .update(listingSources)
-      .set({ lastSeenAt: now })
+      .set(sourceUpdate)
       .where(eq(listingSources.id, existingSource.id))
 
     // Atualiza cidade/estado se ainda não estavam preenchidos
@@ -220,7 +291,7 @@ async function processRawListing(
       })
     }
 
-    return { new: 0, updated: 1 }
+    return { new: 0, updated: 1, listingId: existingSource.listingId }
   }
 
   // Source nova — compara com listings existentes do building
@@ -235,6 +306,8 @@ async function processRawListing(
     type: raw.type,
     area: raw.area ?? null,
     bedrooms: raw.bedrooms ?? null,
+    bathrooms: raw.bathrooms ?? null, // M01
+    garages: raw.garages ?? null,     // M01
     phashes: [], // fotos serão implementadas na fase seguinte
   }
 
@@ -251,6 +324,8 @@ async function processRawListing(
       type: existing.type as 'sale' | 'rent',
       area: existing.area,
       bedrooms: existing.bedrooms,
+      bathrooms: existing.bathrooms ?? null, // M01
+      garages: existing.garages ?? null,     // M01
       phashes: [],
     }
 
@@ -278,6 +353,8 @@ async function processRawListing(
       externalId: raw.externalId,
       firstSeenAt: now,
       lastSeenAt: now,
+      listedAt: raw.listedAt ?? null,         // M01
+      advertiserName: raw.advertiserName ?? null, // M01
     })
 
     const mergeUpdate: Record<string, unknown> = { lastSeenAt: now }
@@ -292,12 +369,15 @@ async function processRawListing(
     console.log(
       `[runner] Merge: ${raw.platform}/${raw.externalId} vinculado ao listing ${bestMatch.id} (score ${bestScore}%)`
     )
-    return { new: 0, updated: 1 }
+    return { new: 0, updated: 1, listingId: bestMatch.id }
   }
 
   // Cria novo listing
   const listingId = generateId()
   const fingerprint = generateFingerprint(raw)
+
+  // M01: descriptionFull sobrescreve description se disponível
+  const finalDescription = raw.descriptionFull ?? raw.description
 
   await db.insert(listings).values({
     id: listingId,
@@ -307,12 +387,14 @@ async function processRawListing(
     floor: raw.floor ?? null,
     area: raw.area ?? null,
     bedrooms: raw.bedrooms ?? null,
+    bathrooms: raw.bathrooms ?? null, // M01
+    garages: raw.garages ?? null,     // M01
     city: raw.city ?? null,
     state: raw.state ?? null,
     priceCurrent: raw.price,
     priceOriginal: raw.price,
     furnished: raw.furnished,
-    description: raw.description,
+    description: finalDescription,
     status: 'active',
     firstSeenAt: now,
     lastSeenAt: now,
@@ -328,6 +410,8 @@ async function processRawListing(
     externalId: raw.externalId,
     firstSeenAt: now,
     lastSeenAt: now,
+    listedAt: raw.listedAt ?? null,         // M01
+    advertiserName: raw.advertiserName ?? null, // M01
   })
 
   // Score 60-89%: cria duplicate_review para revisão manual
@@ -360,7 +444,31 @@ async function processRawListing(
     }
   }
 
-  return { new: 1, updated: 0 }
+  return { new: 1, updated: 0, listingId }
+}
+
+/**
+ * M02: baixa e salva as fotos de um listing, pulando URLs já armazenadas (U14).
+ * R06: falha em foto individual não bloqueia o listing.
+ */
+async function downloadAndSavePhotos(listingId: string, photoUrls: string[]): Promise<void> {
+  for (let i = 0; i < photoUrls.length; i++) {
+    const url = photoUrls[i]
+    try {
+      if (await isPhotoStored(url)) continue
+      const destPath = getPhotoDestPath(listingId, i)
+      const localPath = await downloadPhoto(url, destPath)
+      await db.insert(listingPhotos).values({
+        id: generateId(),
+        listingId,
+        urlOriginal: url,
+        localPath: localPath ?? null,
+        orderIndex: i,
+      })
+    } catch (err) {
+      console.warn(`[runner] Falha ao processar foto ${i} de ${listingId}:`, err)
+    }
+  }
 }
 
 async function deactivateStaleListings(buildingId: string, today: string): Promise<number> {

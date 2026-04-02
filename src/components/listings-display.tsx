@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowUpDown, ArrowUp, ArrowDown, Clock, MapPin, AlertTriangle } from 'lucide-react'
+import { ArrowUpDown, ArrowUp, ArrowDown, Clock, MapPin, AlertTriangle, Bath, Car } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -147,6 +147,16 @@ export function ListingsDisplay({ listings, buildingCity }: ListingsDisplayProps
                         {listing.bedrooms && (
                           <span className="text-xs text-muted-foreground">
                             {listing.bedrooms} dorm.
+                          </span>
+                        )}
+                        {listing.bathrooms && (
+                          <span className="text-xs text-muted-foreground flex items-center gap-0.5">
+                            <Bath className="h-3 w-3" />{listing.bathrooms}
+                          </span>
+                        )}
+                        {listing.garages && (
+                          <span className="text-xs text-muted-foreground flex items-center gap-0.5">
+                            <Car className="h-3 w-3" />{listing.garages}
                           </span>
                         )}
                       </div>

@@ -22,7 +22,9 @@ export function generateFingerprint(listing: Partial<RawListing>): string {
   // Ex: R$1000, R$1050, R$980 → mesma banda
   const priceBand = normalizePriceBand(price)
 
-  const key = `${type}:${floor}:${priceBand}`
+  // M01: bedrooms explícito para evitar fingerprint igual com quartos diferentes (U16)
+  const bedrooms = listing.bedrooms ?? 'X'
+  const key = `${type}:${floor}:${priceBand}|${bedrooms}`
   return crypto.createHash('md5').update(key).digest('hex')
 }
 
@@ -86,6 +88,18 @@ export function calculateSimilarity(
     score += 15
   } else if (a.bedrooms === null && b.bedrooms === null) {
     score += 0
+  }
+
+  // Bathrooms + Garages (M01) — desempate no range 60-89%
+  // +5 se ambos coincidem; -10 se qualquer um diverge 2+ unidades; neutro para divergência de 1
+  if (a.bathrooms !== null && b.bathrooms !== null && a.garages !== null && b.garages !== null) {
+    const bathroomsDiff = Math.abs(a.bathrooms - b.bathrooms)
+    const garagesDiff = Math.abs(a.garages - b.garages)
+    if (bathroomsDiff === 0 && garagesDiff === 0) {
+      score += 5
+    } else if (bathroomsDiff >= 2 || garagesDiff >= 2) {
+      score -= 10
+    }
   }
 
   // Phash (20 pontos) — compara fotos disponíveis

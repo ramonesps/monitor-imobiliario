@@ -140,6 +140,18 @@ export default async function ListingPage({ params }: Params) {
                   <p className="font-medium">{listing.bedrooms}</p>
                 </div>
               )}
+              {listing.bathrooms && (
+                <div>
+                  <p className="text-xs text-muted-foreground">Banheiros</p>
+                  <p className="font-medium">{listing.bathrooms}</p>
+                </div>
+              )}
+              {listing.garages && (
+                <div>
+                  <p className="text-xs text-muted-foreground">Vagas</p>
+                  <p className="font-medium">{listing.garages}</p>
+                </div>
+              )}
               <div>
                 <p className="text-xs text-muted-foreground">Mobília</p>
                 <p className="font-medium">{furnishedLabel(listing.furnished)}</p>
@@ -206,6 +218,14 @@ export default async function ListingPage({ params }: Params) {
                     <p className="font-medium text-sm">{platformLabel(src.platform)}</p>
                     {src.agencyName && (
                       <p className="text-xs text-muted-foreground">{src.agencyName}</p>
+                    )}
+                    {src.advertiserName && src.advertiserName !== src.agencyName && (
+                      <p className="text-xs text-muted-foreground">Anunciante: {src.advertiserName}</p>
+                    )}
+                    {src.listedAt && (
+                      <p className="text-xs text-muted-foreground">
+                        Publicado em: {formatDate(src.listedAt)}
+                      </p>
                     )}
                     <p className="text-xs text-muted-foreground mt-0.5">
                       Visto: {formatDate(src.firstSeenAt)} → {formatDate(src.lastSeenAt)}

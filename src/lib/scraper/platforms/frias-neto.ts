@@ -142,6 +142,51 @@ export class FriasNetoScraper extends BaseScraper {
     }
   }
 
+  /**
+   * M02: visita a página de detalhe para extrair fotos do carrossel.
+   * R06: em caso de falha retorna {} — listing não é bloqueado.
+   */
+  async fetchDetail(url: string): Promise<Partial<RawListing>> {
+    const { chromium } = await import('playwright')
+    const browser = await chromium.launch({ headless: true })
+    try {
+      const context = await browser.newContext({
+        userAgent:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        locale: 'pt-BR',
+      })
+      const page = await context.newPage()
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+
+      const photoUrls = await page.evaluate(() => {
+        const candidates = [
+          '[class*="carousel"] img',
+          '[class*="gallery"] img',
+          '[class*="slider"] img',
+          '[class*="fotos"] img',
+          '.photo-carousel img',
+        ]
+        for (const sel of candidates) {
+          const imgs = document.querySelectorAll(sel)
+          if (imgs.length > 1) {
+            return Array.from(imgs)
+              .map((img) => img.getAttribute('src') ?? img.getAttribute('data-src') ?? '')
+              .filter(Boolean)
+          }
+        }
+        return []
+      })
+
+      await context.close()
+      return photoUrls.length > 0 ? { photoUrls: (photoUrls as string[]).slice(0, 10) } : {}
+    } catch (err) {
+      console.warn('[frias-neto] fetchDetail falhou:', err)
+      return {}
+    } finally {
+      await browser.close()
+    }
+  }
+
   private parsePrice(text: string): number | null {
     const cleaned = text.replace(/[R$\s.]/g, '').replace(',', '.')
     const match = cleaned.match(/(\d+(?:\.\d+)?)/)

@@ -153,11 +153,8 @@ export class ImovelWebScraper extends BaseScraper {
         const amenities: string[] = listing.amenities ?? listing.features ?? []
         const furnished = this.parseFurnishedIW(amenities, listing)
 
-        // Fotos
-        const images: string[] = (listing.images ?? listing.photos ?? [])
-          .map((img: any) => (typeof img === 'string' ? img : img?.url ?? img?.src ?? ''))
-          .filter(Boolean)
-          .slice(0, 10)
+        // Fotos — M02: remove sufixo de tamanho CDN (ex: _240x180) para obter URL full-res
+        const images = this.resolvePhotoUrls(listing.images ?? listing.photos ?? [])
 
         results.push({
           externalId,
@@ -181,6 +178,151 @@ export class ImovelWebScraper extends BaseScraper {
     }
 
     return results
+  }
+
+  /** M02: remove sufixo de tamanho do CDN ImovelWeb (ex: _240x180) para URL full-res. */
+  private resolvePhotoUrls(rawImages: any[]): string[] {
+    return rawImages
+      .map((img: any) => {
+        const url = typeof img === 'string' ? img : img?.url ?? img?.src ?? ''
+        return url.replace(/_\d+x\d+/, '')
+      })
+      .filter(Boolean)
+      .slice(0, 10)
+  }
+
+  /**
+   * Busca página de detalhe para extrair campos não disponíveis na busca.
+   * M01: bathrooms, garages, bedrooms, listedAt, advertiserName, descriptionFull
+   * M02: photoUrls do carrossel da página de detalhe
+   */
+  async fetchDetail(url: string): Promise<Partial<RawListing>> {
+    const { chromium } = await import('playwright')
+    const browser = await chromium.launch({ headless: true })
+
+    try {
+      const context = await browser.newContext({
+        userAgent:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        locale: 'pt-BR',
+      })
+      const page = await context.newPage()
+
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+
+      const result: Partial<RawListing> = {}
+
+      // Tenta extrair dados do application/ld+json
+      const ldJson = await page.evaluate(() => {
+        const scripts = document.querySelectorAll('script[type="application/ld+json"]')
+        for (const s of scripts) {
+          try {
+            const data = JSON.parse(s.textContent ?? '')
+            if (data['@type'] === 'RealEstateListing' || data.numberOfRooms || data.numberOfBathroomsTotal) {
+              return data
+            }
+          } catch { /* ignora */ }
+        }
+        return null
+      })
+
+      if (ldJson) {
+        const bath = parseInt(String(ldJson.numberOfBathroomsTotal ?? 0))
+        if (bath > 0) result.bathrooms = bath
+
+        const garages = parseInt(String(ldJson.numberOfParkingSpaces ?? 0))
+        if (garages > 0) result.garages = garages
+
+        const rooms = parseInt(String(ldJson.numberOfRooms ?? 0))
+        if (rooms > 0) result.bedrooms = rooms
+
+        if (ldJson.datePosted) {
+          // datePosted pode vir como "2025-03-10" ou "10/03/2025"
+          const dp = String(ldJson.datePosted)
+          const isoMatch = dp.match(/^(\d{4}-\d{2}-\d{2})/)
+          const brMatch = dp.match(/^(\d{2})\/(\d{2})\/(\d{4})/)
+          if (isoMatch) {
+            result.listedAt = isoMatch[1]
+          } else if (brMatch) {
+            result.listedAt = `${brMatch[3]}-${brMatch[2]}-${brMatch[1]}`
+          }
+        }
+      }
+
+      // Fallback: regex no texto da página
+      if (!result.bathrooms || !result.garages || !result.bedrooms) {
+        const pageText = await page.evaluate(() => document.body.innerText)
+
+        if (!result.bathrooms) {
+          const m = pageText.match(/(\d+)\s*banheiro/i)
+          if (m) result.bathrooms = parseInt(m[1])
+        }
+        if (!result.garages) {
+          const m = pageText.match(/(\d+)\s*vaga/i)
+          if (m) result.garages = parseInt(m[1])
+        }
+        if (!result.bedrooms) {
+          const m = pageText.match(/(\d+)\s*quarto/i)
+          if (m) result.bedrooms = parseInt(m[1])
+        }
+        if (!result.listedAt) {
+          const m = pageText.match(/[Pp]ublicado\s+em\s+(\d{2})\/(\d{2})\/(\d{4})/)
+          if (m) result.listedAt = `${m[3]}-${m[2]}-${m[1]}`
+        }
+      }
+
+      // Anunciante
+      const advertiserName = await page.evaluate(() => {
+        const el =
+          document.querySelector('[data-testid="publisher-name"]') ??
+          document.querySelector('.publisher-name') ??
+          document.querySelector('[class*="publisher"] [class*="name"]')
+        return el ? el.textContent?.trim() ?? null : null
+      })
+      if (advertiserName) result.advertiserName = advertiserName
+
+      // Descrição completa
+      const descFull = await page.evaluate(() => {
+        const el =
+          document.querySelector('[data-testid="description"]') ??
+          document.querySelector('.description-content') ??
+          document.querySelector('[class*="description"]')
+        return el ? el.textContent?.trim() ?? null : null
+      })
+      if (descFull) result.descriptionFull = descFull
+
+      // M02: fotos do carrossel da página de detalhe
+      const detailPhotos = await page.evaluate(() => {
+        const candidates = [
+          '[class*="carousel"] img',
+          '[class*="gallery"] img',
+          '[class*="photos"] img',
+          '[data-testid*="photo"] img',
+        ]
+        for (const sel of candidates) {
+          const imgs = document.querySelectorAll(sel)
+          if (imgs.length > 0) {
+            return Array.from(imgs)
+              .map((img) => img.getAttribute('src') ?? img.getAttribute('data-src') ?? '')
+              .filter(Boolean)
+          }
+        }
+        return []
+      })
+      if (detailPhotos.length > 0) {
+        result.photoUrls = (detailPhotos as string[])
+          .map((url) => url.replace(/_\d+x\d+/, ''))
+          .slice(0, 10)
+      }
+
+      await context.close()
+      return result
+    } catch (err) {
+      console.warn('[imovelweb] fetchDetail falhou:', err)
+      return {}
+    } finally {
+      await browser.close()
+    }
   }
 
   private parseFurnishedIW(
