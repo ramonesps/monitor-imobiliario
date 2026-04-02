@@ -17,7 +17,8 @@ Sistema web pessoal que monitora anúncios de imóveis (venda e aluguel) em um p
 | Scheduler | node-cron rodando no mesmo processo Node |
 | Fotos | Salvar no disco local da VM |
 | Comparação de imagens | Sharp (perceptual hash) + hamming distance |
-| HTTPS | Let's Encrypt ou Cloudflare Tunnel |
+| HTTPS | Cloudflare DNS proxy (nuvem laranja) — TLS gratuito, sem cert local |
+| URL pública | https://monitor.ramonps.com (subdomínio do portfólio ramonps.com) |
 | Custo | $0/mês |
 
 ---
@@ -373,7 +374,50 @@ interface PlatformScraper {
 
 ---
 
-## 10. Docker para Oracle Cloud
+## 10. Acesso público — monitor.ramonps.com
+
+O app é exposto via subdomínio do portfólio pessoal. A cadeia é:
+
+```
+usuário → https://monitor.ramonps.com
+         → Cloudflare (TLS termination, proxy habilitado)
+         → http://137.131.148.77:80
+         → nginx (reverse proxy local)
+         → http://localhost:3000 (container Docker)
+```
+
+### Configuração Cloudflare DNS
+| Campo | Valor |
+|---|---|
+| Tipo | A |
+| Nome | monitor |
+| Conteúdo | 137.131.148.77 |
+| Proxy | Habilitado (nuvem laranja) |
+| TTL | Auto |
+
+A nuvem laranja fornece HTTPS gratuito sem precisar de Let's Encrypt ou cert local.
+A Oracle Cloud Security List deve permitir inbound TCP porta **80** (Cloudflare → nginx).
+
+### nginx (Oracle Cloud VM)
+Ver arquivo `infra/nginx.conf` na raiz do repositório.
+
+Comandos de deploy do nginx:
+```bash
+sudo cp infra/nginx.conf /etc/nginx/sites-available/monitor
+sudo ln -sf /etc/nginx/sites-available/monitor /etc/nginx/sites-enabled/monitor
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+### Integração com ramonps.com
+O portfólio em `ramonps.com/projects` (repositório `meu-site`) referencia este app como:
+```typescript
+liveUrl: 'https://monitor.ramonps.com'
+```
+Ao clicar em "Live →" no card do projeto, o usuário acessa o monitor diretamente no subdomínio.
+
+---
+
+## 11. Docker para Oracle Cloud
 
 ```dockerfile
 FROM node:20-slim
