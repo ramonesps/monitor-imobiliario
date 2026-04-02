@@ -219,6 +219,7 @@ interface PlatformScraper {
 | POST | /api/duplicate-reviews/:id | Resolver: { action: 'same' | 'different' } |
 | POST | /api/scraper/run | Trigger manual — body: { buildingIds?, platformFilter? }; retorna resultados por plataforma (success, newListings, updatedListings, error) |
 | GET | /api/stats/:building_id | Estatísticas (média, mediana, min, max preço, tempo médio mercado) |
+| GET | /api/photos/[...path] | Servir foto salva localmente — `path` é relativo a `PHOTOS_DIR`; valida contra path traversal; Cache-Control imutável |
 
 ---
 
@@ -249,8 +250,11 @@ interface PlatformScraper {
 │   │       │   └── route.ts
 │   │       ├── scraper/
 │   │       │   └── run/route.ts
-│   │       └── stats/[buildingId]/
-│   │           └── route.ts
+│   │       ├── stats/[buildingId]/
+│   │       │   └── route.ts
+│   │       └── photos/
+│   │           └── [...path]/
+│   │               └── route.ts    # Serve fotos locais de PHOTOS_DIR
 │   ├── lib/
 │   │   ├── db/
 │   │   │   ├── schema.ts              # Drizzle schema (todas as tabelas)
@@ -267,7 +271,7 @@ interface PlatformScraper {
 │   │   │   │   └── miguel-imoveis.ts
 │   │   │   ├── dedup.ts               # Lógica de deduplicação (fingerprint + phash)
 │   │   │   ├── phash.ts               # Perceptual hashing com Sharp
-│   │   │   ├── photo-downloader.ts    # Baixar e salvar fotos
+│   │   │   ├── photo-downloader.ts    # Baixar e salvar fotos; localPathToUrl() converte path local → /api/photos/...
 │   │   │   └── runner.ts              # Orquestrador: roda todas plataformas + dedup
 │   │   ├── cron.ts                    # node-cron setup (roda runner diariamente)
 │   │   └── utils/
@@ -331,7 +335,7 @@ interface PlatformScraper {
 
 ## 9. Lista de testes
 
-### Unitários (10)
+### Unitários (11)
 - U01: phash generation — hash de imagem conhecida
 - U02: phash comparison — mesmo imóvel → distance < 10
 - U03: phash different — imóveis distintos → distance > 30
@@ -342,6 +346,7 @@ interface PlatformScraper {
 - U08: floor extraction — "12º andar" → "12"
 - U09: dedup score — match perfeito=100%, parcial=60-89%, nenhum=<60%
 - U10: status transition — active → inactive após 2 dias ausente
+- U11: localPathToUrl — localPath absoluto/relativo → URL /api/photos/... correta
 
 ### Integração (13)
 - I01-I06: scraper de cada plataforma (mock HTML → campos corretos)
@@ -365,12 +370,13 @@ interface PlatformScraper {
 
   **Pré-condição E09:** `PLAYWRIGHT_BROWSERS_PATH` não deve estar definido no ambiente local (ou deve apontar para o caminho correto). Verificar no startup: `[playwright] Chromium OK: <path>` nos logs do servidor. Se aparecer "Chromium NÃO encontrado", desativar a variável de ambiente e executar `npx playwright install chromium` novamente.
 
-### Resiliência (5)
+### Resiliência (6)
 - R01: plataforma fora do ar → continua nas demais
 - R02: HTML mudou (seletores quebrados) → log, não crash
 - R03: foto 404 → pula, continua
 - R04: rate limiting → retry com backoff
 - R05: cron roda 2x no dia → idempotente
+- R06: localPath ausente (null) → fallback para urlOriginal na UI; arquivo ausente em disco → API retorna 404
 
 ---
 

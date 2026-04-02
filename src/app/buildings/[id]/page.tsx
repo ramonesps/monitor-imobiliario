@@ -10,7 +10,8 @@ import { ScraperRunButton } from '@/components/scraper-run-button'
 import { ListingsDisplay } from '@/components/listings-display'
 import { BuildingActions } from '@/components/building-actions'
 import db from '@/lib/db'
-import { buildings, listings, duplicateReviews } from '@/lib/db/schema'
+import { buildings, listings, listingPhotos, duplicateReviews } from '@/lib/db/schema'
+import { localPathToUrl } from '@/lib/scraper/photo-downloader'
 
 type Params = { params: { id: string } }
 
@@ -25,6 +26,29 @@ async function getBuilding(id: string) {
 
 async function getBuildingListings(buildingId: string) {
   return db.select().from(listings).where(eq(listings.buildingId, buildingId))
+}
+
+async function getBuildingPhotos(buildingId: string): Promise<Record<string, string[]>> {
+  const rows = await db
+    .select({
+      listingId: listingPhotos.listingId,
+      urlOriginal: listingPhotos.urlOriginal,
+      localPath: listingPhotos.localPath,
+    })
+    .from(listingPhotos)
+    .innerJoin(listings, eq(listingPhotos.listingId, listings.id))
+    .where(eq(listings.buildingId, buildingId))
+    .orderBy(listingPhotos.orderIndex)
+
+  const byId: Record<string, string[]> = {}
+  for (const row of rows) {
+    if (!byId[row.listingId]) byId[row.listingId] = []
+    if (byId[row.listingId].length < 3) {
+      const url = row.localPath ? localPathToUrl(row.localPath) : row.urlOriginal
+      byId[row.listingId].push(url)
+    }
+  }
+  return byId
 }
 
 async function getPendingDuplicates(buildingId: string) {
@@ -61,8 +85,11 @@ export default async function BuildingPage({ params }: Params) {
   const building = await getBuilding(params.id)
   if (!building) notFound()
 
-  const allListings = await getBuildingListings(params.id)
-  const pendingDuplicates = await getPendingDuplicates(params.id)
+  const [allListings, photosByListingId, pendingDuplicates] = await Promise.all([
+    getBuildingListings(params.id),
+    getBuildingPhotos(params.id),
+    getPendingDuplicates(params.id),
+  ])
 
   const active = allListings.filter((l) => l.status === 'active')
   const inactive = allListings.filter((l) => l.status === 'inactive')
@@ -236,6 +263,7 @@ export default async function BuildingPage({ params }: Params) {
               <ListingsDisplay
                 listings={items as import('@/types').Listing[]}
                 buildingCity={building.city}
+                photosByListingId={photosByListingId}
               />
             </TabsContent>
           ))}

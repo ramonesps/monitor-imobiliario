@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { PriceChart } from '@/components/price-chart'
 import db from '@/lib/db'
 import { listings, listingSources, priceHistory, buildings, listingPhotos } from '@/lib/db/schema'
+import { localPathToUrl } from '@/lib/scraper/photo-downloader'
 
 type Params = { params: { id: string } }
 
@@ -119,7 +120,7 @@ export default async function ListingPage({ params }: Params) {
             <a href={photos[0].urlOriginal} target="_blank" rel="noopener noreferrer">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={photos[0].urlOriginal}
+                src={photos[0].localPath ? localPathToUrl(photos[0].localPath) : photos[0].urlOriginal}
                 alt="Foto principal"
                 className="w-full h-64 object-cover rounded-lg"
               />
@@ -131,7 +132,7 @@ export default async function ListingPage({ params }: Params) {
                   <a key={photo.id} href={photo.urlOriginal} target="_blank" rel="noopener noreferrer">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={photo.urlOriginal}
+                      src={photo.localPath ? localPathToUrl(photo.localPath) : photo.urlOriginal}
                       alt={`Foto ${i + 2}`}
                       className="w-full h-24 object-cover rounded-lg"
                     />

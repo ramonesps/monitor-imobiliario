@@ -1,9 +1,9 @@
 // Testes de resiliência do sistema
-// Cobertura: R01, R02, R03, R04, R05
+// Cobertura: R01, R02, R03, R04, R05, R06
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { ALL_SCRAPERS, runScraper } from '@/lib/scraper/runner'
-import { downloadPhoto } from '@/lib/scraper/photo-downloader'
+import { downloadPhoto, localPathToUrl } from '@/lib/scraper/photo-downloader'
 import { BaseScraper } from '@/lib/scraper/platforms/base'
 import type { RawListing } from '@/types'
 
@@ -16,11 +16,15 @@ vi.mock('@/lib/scraper/runner', async (importOriginal) => {
   }
 })
 
-// Mock do photo-downloader
-vi.mock('@/lib/scraper/photo-downloader', () => ({
-  downloadPhoto: vi.fn(),
-  getPhotoDestPath: vi.fn((id: string, i: number) => `/tmp/${id}/${i}.jpg`),
-}))
+// Mock do photo-downloader — mantém localPathToUrl real, mocka apenas I/O
+vi.mock('@/lib/scraper/photo-downloader', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/scraper/photo-downloader')>()
+  return {
+    ...actual,
+    downloadPhoto: vi.fn(),
+    getPhotoDestPath: vi.fn((id: string, i: number) => `/tmp/${id}/${i}.jpg`),
+  }
+})
 
 // Scraper que sempre lança erro (para R01)
 class ErrorScraper extends BaseScraper {
@@ -227,5 +231,24 @@ describe('R05: Cron roda 2x → idempotente (não duplica listings)', () => {
 
     existingSources.push({ externalUrl: newExternalUrl })
     expect(existingSources).toHaveLength(1)
+  })
+})
+
+describe('R06: localPath ausente → fallback para urlOriginal; arquivo ausente → não quebra UI', () => {
+  it('deve usar urlOriginal quando localPath é null', () => {
+    const urlOriginal = 'https://resizedimgs.vivareal.com/foto.jpg'
+    const localPath: string | null = null
+
+    const displayUrl = localPath ? localPathToUrl(localPath, '/app/data/photos') : urlOriginal
+    expect(displayUrl).toBe(urlOriginal)
+  })
+
+  it('deve usar /api/photos/... quando localPath está preenchido', () => {
+    const urlOriginal = 'https://resizedimgs.vivareal.com/foto.jpg'
+    const localPath = '/app/data/photos/a1/uuid/0.jpg'
+
+    const displayUrl = localPath ? localPathToUrl(localPath, '/app/data/photos') : urlOriginal
+    expect(displayUrl).toBe('/api/photos/a1/uuid/0.jpg')
+    expect(displayUrl).not.toBe(urlOriginal)
   })
 })

@@ -93,3 +93,17 @@ export function getPhotoDestPath(listingId: string, photoIndex: number, ext = 'j
   const subDir = listingId.slice(0, 2) // Primeiro 2 chars como subdiretório
   return path.join(PHOTOS_DIR, subDir, listingId, `${photoIndex}.${ext}`)
 }
+
+/**
+ * Converte o localPath salvo no banco para uma URL servida por /api/photos/...
+ * Aceita photosDir opcional para facilitar testes.
+ *
+ * Exemplo: '/app/data/photos/a1/uuid/0.jpg' → '/api/photos/a1/uuid/0.jpg'
+ */
+export function localPathToUrl(localPath: string, photosDir?: string): string {
+  const base = path.resolve(photosDir ?? process.env.PHOTOS_DIR ?? './data/photos')
+  const resolved = path.resolve(localPath)
+  const relative = path.relative(base, resolved)
+  // Normaliza separadores para URL (relevante no Windows)
+  return '/api/photos/' + relative.split(path.sep).join('/')
+}
