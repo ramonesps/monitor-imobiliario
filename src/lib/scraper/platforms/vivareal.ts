@@ -117,6 +117,15 @@ export class VivaRealScraper extends BaseScraper {
                 const externalUrl = href.startsWith('http') ? href : `${BASE_URL}${href}`
                 const address = listing?.address ?? item?.address ?? {}
 
+                // M01: campos novos
+                const vrBathroomsRaw = listing.bathrooms
+                const vrBathroomCount = Array.isArray(vrBathroomsRaw) ? vrBathroomsRaw[0] : vrBathroomsRaw
+                const vrGaragesRaw = listing.parkingSpaces
+                const vrGarageCount = Array.isArray(vrGaragesRaw) ? vrGaragesRaw[0] : vrGaragesRaw
+                const vrDescFull = String(listing.description ?? '')
+                const vrListedAt = listing.updatedAt ? String(listing.updatedAt) : undefined
+                const vrAdvertiserName = String(item?.account?.name ?? '') || undefined
+
                 pageListings.push({
                   externalId,
                   externalUrl,
@@ -126,10 +135,15 @@ export class VivaRealScraper extends BaseScraper {
                   floor: listing.unitFloor != null ? String(listing.unitFloor) : undefined,
                   area: listing.usableAreas?.[0] ?? listing.usableArea ?? undefined,
                   bedrooms: listing.bedrooms?.[0] ?? listing.bedroom ?? undefined,
+                  bathrooms: vrBathroomCount && Number(vrBathroomCount) > 0 ? Number(vrBathroomCount) : undefined,
+                  garages: vrGarageCount && Number(vrGarageCount) > 0 ? Number(vrGarageCount) : undefined,
                   furnished: this.parseFurnishedVR(listing.amenities ?? []),
-                  description: String(listing.description ?? '').slice(0, 2000),
-                  agencyName: String(item?.account?.name ?? '') || undefined,
-                  photoUrls: (listing.images ?? []).slice(0, 10),
+                  description: vrDescFull.slice(0, 2000),
+                  descriptionFull: vrDescFull || undefined,
+                  listedAt: vrListedAt,
+                  advertiserName: vrAdvertiserName,
+                  agencyName: vrAdvertiserName,
+                  photoUrls: this.resolvePhotoUrls(listing.images ?? []),
                   city: address.city ?? address.neighborhood?.city ?? undefined,
                   state: address.stateAcronym ?? address.state ?? undefined,
                 })
@@ -198,10 +212,7 @@ export class VivaRealScraper extends BaseScraper {
         const floorRaw = listing.unitFloor ?? listing.floor ?? null
         const floor = floorRaw !== null ? String(floorRaw) : undefined
         const amenities: string[] = listing.amenities ?? []
-        const images: string[] = (listing.images ?? [])
-          .map((img: any) => (typeof img === 'string' ? img : img?.url ?? ''))
-          .filter(Boolean)
-          .slice(0, 10)
+        const images = this.resolvePhotoUrls(listing.images ?? [])
 
         const addressCity =
           listing?.address?.city ??
@@ -214,6 +225,15 @@ export class VivaRealScraper extends BaseScraper {
           item?.address?.stateAcronym ??
           null
 
+        // M01: campos novos
+        const vrBathroomsRaw2 = listing.bathrooms
+        const vrBathroomCount2 = Array.isArray(vrBathroomsRaw2) ? vrBathroomsRaw2[0] : vrBathroomsRaw2
+        const vrGaragesRaw2 = listing.parkingSpaces
+        const vrGarageCount2 = Array.isArray(vrGaragesRaw2) ? vrGaragesRaw2[0] : vrGaragesRaw2
+        const vrDescFull2 = String(listing.description ?? '')
+        const vrListedAt2 = listing.updatedAt ? String(listing.updatedAt) : undefined
+        const vrAdvertiserName2 = String(account.name ?? account.companyName ?? '') || undefined
+
         results.push({
           externalId,
           externalUrl,
@@ -223,9 +243,14 @@ export class VivaRealScraper extends BaseScraper {
           floor,
           area: area ? Number(area) : undefined,
           bedrooms: bedroomCount ? Number(bedroomCount) : undefined,
+          bathrooms: vrBathroomCount2 && Number(vrBathroomCount2) > 0 ? Number(vrBathroomCount2) : undefined,
+          garages: vrGarageCount2 && Number(vrGarageCount2) > 0 ? Number(vrGarageCount2) : undefined,
           furnished: this.parseFurnishedVR(amenities),
-          description: String(listing.description ?? '').slice(0, 2000),
-          agencyName: String(account.name ?? account.companyName ?? '') || undefined,
+          description: vrDescFull2.slice(0, 2000),
+          descriptionFull: vrDescFull2 || undefined,
+          listedAt: vrListedAt2,
+          advertiserName: vrAdvertiserName2,
+          agencyName: vrAdvertiserName2,
           photoUrls: images,
           city: addressCity ? String(addressCity) : undefined,
           state: addressState ? String(addressState) : undefined,
@@ -236,6 +261,22 @@ export class VivaRealScraper extends BaseScraper {
     }
 
     return results
+  }
+
+  /** M02: resolve URLs de maior resolução disponível — idêntico ao ZAP (mesma plataforma OLX Group). */
+  private resolvePhotoUrls(rawImages: any[]): string[] {
+    return rawImages
+      .map((img: any) => {
+        if (typeof img === 'string') return img
+        const variants: any[] = img.sizes ?? img.resolutions ?? img.variants ?? []
+        if (variants.length > 0) {
+          const best = [...variants].sort((a: any, b: any) => (b.width ?? 0) - (a.width ?? 0))[0]
+          return best?.url ?? img.original ?? img.url ?? ''
+        }
+        return img.original ?? img.url ?? ''
+      })
+      .filter(Boolean)
+      .slice(0, 10)
   }
 
   private parseFurnishedVR(amenities: string[]): 'full' | 'partial' | 'none' | 'unknown' {

@@ -34,6 +34,8 @@ export const listings = sqliteTable('listings', {
   floor: text('floor'),
   area: real('area'),
   bedrooms: integer('bedrooms'),
+  bathrooms: integer('bathrooms'), // M01: número de banheiros
+  garages: integer('garages'),     // M01: número de vagas de garagem
   city: text('city'),  // cidade extraída pelo scraper
   state: text('state'), // estado (UF) extraído pelo scraper
   priceCurrent: real('price_current').notNull(),
@@ -62,6 +64,8 @@ export const listingSources = sqliteTable('listing_sources', {
   externalId: text('external_id').notNull(),
   firstSeenAt: text('first_seen_at').notNull(),
   lastSeenAt: text('last_seen_at').notNull(),
+  listedAt: text('listed_at'),           // M01: data de publicação na plataforma
+  advertiserName: text('advertiser_name'), // M01: nome do anunciante como exibido
 })
 
 // ============================================================
@@ -85,7 +89,7 @@ export const listingPhotos = sqliteTable('listing_photos', {
   listingId: text('listing_id')
     .notNull()
     .references(() => listings.id),
-  urlOriginal: text('url_original').notNull(),
+  urlOriginal: text('url_original').notNull().unique(), // M02: evita download duplicado
   localPath: text('local_path'),
   phash: text('phash'), // perceptual hash 64-bit
   orderIndex: integer('order_index').notNull().default(0),

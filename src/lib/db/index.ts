@@ -112,6 +112,11 @@ export async function initDb() {
     'ALTER TABLE buildings ADD COLUMN sale_price_max REAL',
     'ALTER TABLE listings ADD COLUMN city TEXT',
     'ALTER TABLE listings ADD COLUMN state TEXT',
+    // M01
+    'ALTER TABLE listings ADD COLUMN bathrooms INTEGER',
+    'ALTER TABLE listings ADD COLUMN garages INTEGER',
+    'ALTER TABLE listing_sources ADD COLUMN listed_at TEXT',
+    'ALTER TABLE listing_sources ADD COLUMN advertiser_name TEXT',
   ]
   for (const sql of newColumns) {
     try {

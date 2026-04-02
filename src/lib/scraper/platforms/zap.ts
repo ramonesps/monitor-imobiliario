@@ -163,14 +163,20 @@ export class ZapScraper extends BaseScraper {
         const floorRaw = listing.unitFloor ?? listing.floor ?? null
         const floor = floorRaw !== null ? String(floorRaw) : undefined
         const amenities: string[] = listing.amenities ?? []
-        const images: string[] = (listing.images ?? [])
-          .map((img: any) => (typeof img === 'string' ? img : img?.url ?? ''))
-          .filter(Boolean)
-          .slice(0, 10)
+        const images = this.resolvePhotoUrls(listing.images ?? [])
 
         const address = listing?.address ?? item?.address ?? {}
         const addressCity = address?.city ?? address?.neighborhood?.city ?? null
         const addressState = address?.stateAcronym ?? address?.state ?? null
+
+        // M01: campos novos
+        const bathroomsRaw = listing.bathrooms
+        const bathroomCount = Array.isArray(bathroomsRaw) ? bathroomsRaw[0] : bathroomsRaw
+        const garagesRaw = listing.parkingSpaces
+        const garageCount = Array.isArray(garagesRaw) ? garagesRaw[0] : garagesRaw
+        const descFull = String(listing.description ?? '')
+        const listedAt = listing.updatedAt ? String(listing.updatedAt) : undefined
+        const advertiserName = String(item?.account?.name ?? item?.account?.companyName ?? '') || undefined
 
         results.push({
           externalId,
@@ -181,9 +187,14 @@ export class ZapScraper extends BaseScraper {
           floor,
           area: area ? Number(area) : undefined,
           bedrooms: bedroomCount ? Number(bedroomCount) : undefined,
+          bathrooms: bathroomCount && Number(bathroomCount) > 0 ? Number(bathroomCount) : undefined,
+          garages: garageCount && Number(garageCount) > 0 ? Number(garageCount) : undefined,
           furnished: this.parseFurnishedZap(amenities),
-          description: String(listing.description ?? '').slice(0, 2000),
-          agencyName: String(item?.account?.name ?? item?.account?.companyName ?? '') || undefined,
+          description: descFull.slice(0, 2000),
+          descriptionFull: descFull || undefined,
+          listedAt,
+          advertiserName,
+          agencyName: advertiserName,
           photoUrls: images,
           city: addressCity ? String(addressCity) : undefined,
           state: addressState ? String(addressState) : undefined,
@@ -232,6 +243,11 @@ export class ZapScraper extends BaseScraper {
         if (!price || price <= 0) continue
 
         const address = block.address ?? {}
+        const rscDescFull = String(block.description ?? '')
+        const rscBathrooms = block.bathrooms
+        const rscBathroomCount = Array.isArray(rscBathrooms) ? rscBathrooms[0] : rscBathrooms
+        const rscGarages = block.parkingSpaces
+        const rscGarageCount = Array.isArray(rscGarages) ? rscGarages[0] : rscGarages
         results.push({
           externalId: String(block.id),
           externalUrl: `${BASE_URL}/imovel/${block.id}`,
@@ -240,9 +256,13 @@ export class ZapScraper extends BaseScraper {
           price,
           area: block.usableAreas?.[0] ?? block.usableArea ?? undefined,
           bedrooms: block.bedrooms?.[0] ?? block.bedroom ?? undefined,
+          bathrooms: rscBathroomCount && Number(rscBathroomCount) > 0 ? Number(rscBathroomCount) : undefined,
+          garages: rscGarageCount && Number(rscGarageCount) > 0 ? Number(rscGarageCount) : undefined,
           furnished: this.parseFurnishedZap(block.amenities ?? []),
-          description: String(block.description ?? '').slice(0, 2000),
-          photoUrls: (block.images ?? []).slice(0, 10),
+          description: rscDescFull.slice(0, 2000),
+          descriptionFull: rscDescFull || undefined,
+          listedAt: block.updatedAt ? String(block.updatedAt) : undefined,
+          photoUrls: this.resolvePhotoUrls(block.images ?? []),
           city: address.city ?? undefined,
           state: address.stateAcronym ?? address.state ?? undefined,
         })
@@ -325,10 +345,7 @@ export class ZapScraper extends BaseScraper {
         const floorRaw = listing.unitFloor ?? listing.floor ?? null
         const floor = floorRaw !== null ? String(floorRaw) : undefined
         const amenities: string[] = listing.amenities ?? []
-        const images: string[] = (listing.images ?? [])
-          .map((img: any) => (typeof img === 'string' ? img : img?.url ?? ''))
-          .filter(Boolean)
-          .slice(0, 10)
+        const images = this.resolvePhotoUrls(listing.images ?? [])
 
         const addressCity =
           listing?.address?.city ??
@@ -341,6 +358,15 @@ export class ZapScraper extends BaseScraper {
           item?.address?.stateAcronym ??
           null
 
+        // M01: campos novos
+        const bathroomsRaw = listing.bathrooms
+        const bathroomCount2 = Array.isArray(bathroomsRaw) ? bathroomsRaw[0] : bathroomsRaw
+        const garagesRaw = listing.parkingSpaces
+        const garageCount2 = Array.isArray(garagesRaw) ? garagesRaw[0] : garagesRaw
+        const descFull2 = String(listing.description ?? '')
+        const listedAt2 = listing.updatedAt ? String(listing.updatedAt) : undefined
+        const advertiserName2 = String(account.name ?? account.companyName ?? '') || undefined
+
         results.push({
           externalId,
           externalUrl,
@@ -350,9 +376,14 @@ export class ZapScraper extends BaseScraper {
           floor,
           area: area ? Number(area) : undefined,
           bedrooms: bedroomCount ? Number(bedroomCount) : undefined,
+          bathrooms: bathroomCount2 && Number(bathroomCount2) > 0 ? Number(bathroomCount2) : undefined,
+          garages: garageCount2 && Number(garageCount2) > 0 ? Number(garageCount2) : undefined,
           furnished: this.parseFurnishedZap(amenities),
-          description: String(listing.description ?? '').slice(0, 2000),
-          agencyName: String(account.name ?? account.companyName ?? '') || undefined,
+          description: descFull2.slice(0, 2000),
+          descriptionFull: descFull2 || undefined,
+          listedAt: listedAt2,
+          advertiserName: advertiserName2,
+          agencyName: advertiserName2,
           photoUrls: images,
           city: addressCity ? String(addressCity) : undefined,
           state: addressState ? String(addressState) : undefined,
@@ -363,6 +394,25 @@ export class ZapScraper extends BaseScraper {
     }
 
     return results
+  }
+
+  /** M02: resolve URLs de maior resolução disponível para ZAP/VivaReal.
+   *  O JSON da API interna pode conter variantes de tamanho em img.sizes ou img.resolutions.
+   *  Seleciona a variante com maior width; faz fallback para img.original ou img.url.
+   */
+  private resolvePhotoUrls(rawImages: any[]): string[] {
+    return rawImages
+      .map((img: any) => {
+        if (typeof img === 'string') return img
+        const variants: any[] = img.sizes ?? img.resolutions ?? img.variants ?? []
+        if (variants.length > 0) {
+          const best = [...variants].sort((a: any, b: any) => (b.width ?? 0) - (a.width ?? 0))[0]
+          return best?.url ?? img.original ?? img.url ?? ''
+        }
+        return img.original ?? img.url ?? ''
+      })
+      .filter(Boolean)
+      .slice(0, 10)
   }
 
   private parseFurnishedZap(amenities: string[]): 'full' | 'partial' | 'none' | 'unknown' {

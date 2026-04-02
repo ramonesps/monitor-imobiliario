@@ -48,20 +48,33 @@ interface RawListing {
   floor?: string;
   area?: number;
   bedrooms?: number;
+  bathrooms?: number;       // M01: banheiros
+  garages?: number;         // M01: vagas de garagem
   furnished: 'full' | 'partial' | 'none' | 'unknown';
   description: string;
+  descriptionFull?: string; // M01: descrição completa (sem truncamento); sobrescreve description no DB
   agencyName?: string;
-  photoUrls: string[];
-  city?: string;  // cidade do anúncio; extraída pelo scraper; usada para filtro e exibição
-  state?: string; // estado (UF) do anúncio
+  advertiserName?: string;  // M01: nome do anunciante como exibido na plataforma
+  listedAt?: string;        // M01: ISO date de publicação na plataforma
+  photoUrls: string[];      // M02: URLs de maior resolução disponível
+  city?: string;            // cidade do anúncio; extraída pelo scraper; usada para filtro e exibição
+  state?: string;           // estado (UF) do anúncio
+}
+```
+
+### Interface do scraper (atualizada):
+```typescript
+interface PlatformScraper {
+  name: string;
+  search(buildingName: string, address: string): Promise<RawListing[]>;
+  fetchDetail?(url: string): Promise<Partial<RawListing>>; // M01: opcional — busca campos adicionais na página do imóvel
 }
 ```
 
 ### Notas de implementação por plataforma:
-- **ZAP / VivaReal**: migraram para Next.js App Router — não usam mais `__NEXT_DATA__`. Estratégia atual: (1) interceptar respostas JSON da API interna via `page.on('response')`, (2) fallback RSC (`self.__next_f`), (3) legacy `__NEXT_DATA__` para páginas antigas. Extrai `city` de `listing.address.city` e `state` de `listing.address.stateAcronym`.
-- **OLX**: ainda usa `__NEXT_DATA__`. Extrai `city` de `ad.location.municipality` e `state` de `ad.location.uf`.
-- **ImovelWeb, Frias Neto, Miguel Imóveis**: city/state não implementados ainda.
-```
+- **ZAP / VivaReal**: migraram para Next.js App Router — não usam mais `__NEXT_DATA__`. Estratégia atual: (1) interceptar respostas JSON da API interna via `page.on('response')`, (2) fallback RSC (`self.__next_f`), (3) legacy `__NEXT_DATA__` para páginas antigas. Extrai `city` de `listing.address.city`, `state` de `listing.address.stateAcronym`, `bathrooms` de `listing.bathrooms`, `garages` de `listing.parkingSpaces`. Usa `resolvePhotoUrls()` para selecionar variante de maior resolução em `img.sizes`/`img.resolutions`.
+- **OLX**: ainda usa `__NEXT_DATA__`. Extrai `city` de `ad.location.municipality`, `state` de `ad.location.uf`, `bathrooms`/`garages` de `ad.properties` (por `name` exato), `listedAt` de `ad.listTime`. Fotos: usa `img.original` (full-res).
+- **ImovelWeb, Frias Neto, Miguel Imóveis**: city/state/bathrooms/garages não implementados ainda.
 
 ---
 
@@ -93,6 +106,8 @@ interface RawListing {
 | floor | TEXT |
 | area | REAL |
 | bedrooms | INTEGER |
+| bathrooms | INTEGER (M01) |
+| garages | INTEGER (M01) |
 | city | TEXT (cidade do anúncio, extraída pelo scraper) |
 | state | TEXT (UF do anúncio, extraída pelo scraper) |
 | price_current | REAL |
@@ -117,6 +132,8 @@ interface RawListing {
 | external_id | TEXT |
 | first_seen_at | TEXT |
 | last_seen_at | TEXT |
+| listed_at | TEXT (M01: data de publicação na plataforma) |
+| advertiser_name | TEXT (M01: nome do anunciante como exibido) |
 
 ### price_history
 | Campo | Tipo |
@@ -132,7 +149,7 @@ interface RawListing {
 |---|---|
 | id | TEXT PK (UUID) |
 | listing_id | TEXT FK |
-| url_original | TEXT |
+| url_original | TEXT UNIQUE (M02: evita download duplicado) |
 | local_path | TEXT |
 | phash | TEXT (perceptual hash 64-bit) |
 | order_index | INTEGER |

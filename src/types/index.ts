@@ -39,6 +39,8 @@ export interface Listing {
   floor: string | null
   area: number | null
   bedrooms: number | null
+  bathrooms: number | null  // M01
+  garages: number | null    // M01
   city: string | null
   state: string | null
   priceCurrent: number
@@ -62,6 +64,8 @@ export interface ListingSource {
   externalId: string
   firstSeenAt: string
   lastSeenAt: string
+  listedAt: string | null      // M01: data de publicação na plataforma
+  advertiserName: string | null // M01: nome do anunciante como exibido
 }
 
 export interface PriceHistory {
@@ -109,11 +113,18 @@ export interface RawListing {
   photoUrls: string[]
   city?: string  // cidade do anúncio; usado para filtro e exibição
   state?: string // estado (UF)
+  // M01 — campos novos
+  bathrooms?: number        // banheiros
+  garages?: number          // vagas de garagem
+  listedAt?: string         // ISO date vinda da plataforma
+  advertiserName?: string   // nome do anunciante como exibido
+  descriptionFull?: string  // descrição completa; se preenchida, sobrescreve description no DB
 }
 
 export interface PlatformScraper {
   name: string
   search(buildingName: string, address: string): Promise<RawListing[]>
+  fetchDetail?(url: string): Promise<Partial<RawListing>> // M01: opcional
 }
 
 // ============================================================
@@ -126,6 +137,8 @@ export interface ListingFingerprint {
   type: ListingType
   area: number | null
   bedrooms: number | null
+  bathrooms: number | null  // M01: usado como desempate no score
+  garages: number | null    // M01: usado como desempate no score
   phashes: string[]
 }
 

@@ -134,14 +134,34 @@ export class OlxScraper extends BaseScraper {
         const furnishingParam = this.extractParamRaw(params, ['furnished', 'mobilia', 'mobiliado'])
         const furnished = furnishingParam ? this.parseFurnished(String(furnishingParam)) : 'unknown'
 
-        // Fotos
+        // M01: bathrooms, garages via ad.properties (filtra por name exato)
+        const parseIntProp = (key: string): number | undefined => {
+          const v = parseInt(
+            ad.properties?.find((p: any) => p.name === key)?.value ?? '0'
+          )
+          return v > 0 ? v : undefined
+        }
+        const bathrooms = parseIntProp('bathrooms')
+        const garages = parseIntProp('garage')
+        // M01: bedrooms via ad.properties (mais preciso que extractParam para OLX)
+        const bedroomsFromProps = parseIntProp('rooms')
+
+        // M01: listedAt e advertiserName
+        const olxListedAt = ad.listTime ? new Date(ad.listTime).toISOString() : undefined
+        const olxAdvertiserName = ad.user?.name ? String(ad.user.name) : undefined
+
+        // Fotos — M02: usa img.original (full-res) quando disponível; fallback para src/url
         const images: string[] = (ad.images ?? ad.photos ?? [])
-          .map((img: any) => (typeof img === 'string' ? img : img?.src ?? img?.url ?? ''))
+          .map((img: any) => (typeof img === 'string' ? img : img?.original ?? img?.src ?? img?.url ?? ''))
           .filter(Boolean)
           .slice(0, 10)
 
         const olxCity = ad.location?.municipality ?? ad.location?.city ?? ad.municipality ?? null
         const olxState = ad.location?.uf ?? ad.location?.state ?? ad.uf ?? null
+
+        // M01: descriptionFull — se body termina em "...", sinaliza que pode estar truncado
+        const olxBody = String(ad.body ?? ad.description ?? ad.subject ?? '')
+        const olxDescFull = olxBody.trimEnd().endsWith('...') ? undefined : olxBody
 
         results.push({
           externalId: adId,
@@ -151,10 +171,15 @@ export class OlxScraper extends BaseScraper {
           price,
           floor,
           area: area ? Number(area) : undefined,
-          bedrooms: bedrooms ? Number(bedrooms) : undefined,
+          bedrooms: bedroomsFromProps ?? (bedrooms ? Number(bedrooms) : undefined),
+          bathrooms,
+          garages,
           furnished,
-          description: String(ad.body ?? ad.description ?? ad.subject ?? '').slice(0, 2000),
-          agencyName: ad.user?.name ?? ad.professionalAd ? 'Imobiliária' : undefined,
+          description: olxBody.slice(0, 2000),
+          descriptionFull: olxDescFull,
+          listedAt: olxListedAt,
+          advertiserName: olxAdvertiserName,
+          agencyName: ad.user?.name ?? (ad.professionalAd ? 'Imobiliária' : undefined),
           photoUrls: images,
           city: olxCity ? String(olxCity) : undefined,
           state: olxState ? String(olxState) : undefined,
